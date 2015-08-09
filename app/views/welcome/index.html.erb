@@ -1,0 +1,41 @@
+<div class="row">
+	<div class="col s12 m3">
+		<div class="card small">
+		  <div class="card-image">
+		    <%= image_tag("/images/EUR.jpg") %>
+		    <span class="card-title" style="color: gray">EUR</span>
+		    <%= Currency.where(:sign => :EUR).first.rate %> Рубля за 1 <%= Currency.where(:sign => :EUR).first.name %>
+		  </div>
+		</div>
+	</div>
+
+	<div class="col s12 m3">
+		<div class="card small">
+		  <div class="card-image">
+		    <%= image_tag("/images/USD.jpg") %>
+		    <span class="card-title" style="color: white">USD</span>
+		    <%= Currency.where(:sign => :USD).first.rate %> Рубля за 1 <%= Currency.where(:sign => :USD).first.name %>
+		  </div>
+		</div>
+	</div>
+	
+	<div class="col s12 m3">
+		<div class="card small">
+		  <div class="card-image">
+		    <%= image_tag("/images/EUR.jpg") %>
+		    <span class="card-title" style="color: gray">EUR</span>
+		    <%= Currency.where(:sign => :EUR).first.rate %> Рубля за 1 <%= Currency.where(:sign => :EUR).first.name %>
+		  </div>
+		</div>
+	</div>
+
+	<div class="col s12 m3">
+		<div class="card small">
+		  <div class="card-image">
+		    <%= image_tag("/images/USD.jpg") %>
+		    <span class="card-title" style="color: white">USD</span>
+		    <%= Currency.where(:sign => :USD).first.rate %> Рубля за 1 <%= Currency.where(:sign => :USD).first.name %>
+		  </div>
+		</div>
+	</div>
+</div>

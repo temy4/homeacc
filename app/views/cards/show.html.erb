@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Cc type:</strong>
+  <%= @card.cc_type %>
+</p>
+
+<p>
+  <strong>Number short:</strong>
+  <%= @card.number_short %>
+</p>
+
+<p>
+  <strong>Number full:</strong>
+  <%= @card.number_full %>
+</p>
+
+<p>
+  <strong>Month end:</strong>
+  <%= @card.month_end %>
+</p>
+
+<p>
+  <strong>Year end:</strong>
+  <%= @card.year_end %>
+</p>
+
+<p>
+  <strong>Owner:</strong>
+  <%= @card.owner %>
+</p>
+
+<p>
+  <strong>Alias:</strong>
+  <%= @card.alias %>
+</p>
+
+<p>
+  <strong>Is active:</strong>
+  <%= @card.is_active %>
+</p>
+
+<%= link_to 'Edit', edit_card_path(@card) %> |
+<%= link_to 'Back', cards_path %>

@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Money Units</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Counterparty</th>
+      <th>Currency</th>
+      <th>Tax</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Period</th>
+      <th>Current period price</th>
+      <th>Next period price</th>
+      <th>Current period</th>
+      <th>Next period</th>
+      <th>Is active</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @money_units.each do |money_unit| %>
+      <tr>
+        <td><%= money_unit.counterparty_id %></td>
+        <td><%= money_unit.currency_id %></td>
+        <td><%= money_unit.tax_id %></td>
+        <td><%= money_unit.type %></td>
+        <td><%= money_unit.name %></td>
+        <td><%= money_unit.period %></td>
+        <td><%= money_unit.current_period_price %></td>
+        <td><%= money_unit.next_period_price %></td>
+        <td><%= money_unit.current_period %></td>
+        <td><%= money_unit.next_period %></td>
+        <td><%= money_unit.is_active %></td>
+        <td><%= link_to 'Show', money_unit %></td>
+        <td><%= link_to 'Edit', edit_money_unit_path(money_unit) %></td>
+        <td><%= link_to 'Destroy', money_unit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Money unit', new_money_unit_path %>

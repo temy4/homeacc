@@ -1,0 +1,61 @@
+<%= form_for(@money_unit) do |f| %>
+  <% if @money_unit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@money_unit.errors.count, "error") %> prohibited this money_unit from being saved:</h2>
+
+      <ul>
+      <% @money_unit.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :counterparty_id %><br>
+    <%= f.number_field :counterparty_id %>
+  </div>
+  <div class="field">
+    <%= f.label :currency_id %><br>
+    <%= f.number_field :currency_id %>
+  </div>
+  <div class="field">
+    <%= f.label :tax_id %><br>
+    <%= f.number_field :tax_id %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br>
+    <%= f.text_field :type %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :period %><br>
+    <%= f.text_field :period %>
+  </div>
+  <div class="field">
+    <%= f.label :current_period_price %><br>
+    <%= f.number_field :current_period_price %>
+  </div>
+  <div class="field">
+    <%= f.label :next_period_price %><br>
+    <%= f.number_field :next_period_price %>
+  </div>
+  <div class="field">
+    <%= f.label :current_period %><br>
+    <%= f.date_select :current_period %>
+  </div>
+  <div class="field">
+    <%= f.label :next_period %><br>
+    <%= f.date_select :next_period %>
+  </div>
+  <div class="field">
+    <%= f.label :is_active %><br>
+    <%= f.check_box :is_active %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

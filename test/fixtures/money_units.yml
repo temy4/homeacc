@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  counterparty_id: 1
+  currency_id: 1
+  tax_id: 1
+  type: 
+  name: MyString
+  period: MyString
+  current_period_price: 1
+  next_period_price: 1
+  current_period: 2015-07-30
+  next_period: 2015-07-30
+  is_active: false
+
+two:
+  counterparty_id: 1
+  currency_id: 1
+  tax_id: 1
+  type: 
+  name: MyString
+  period: MyString
+  current_period_price: 1
+  next_period_price: 1
+  current_period: 2015-07-30
+  next_period: 2015-07-30
+  is_active: false

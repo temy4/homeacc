@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Домашняя бухгалтерия</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <!-- Navbar goes here -->
+  <nav>
+	<div class="nav-wrapper cyan darken-1">
+	  <a href="#" class="brand-logo">
+		<a id="logo-container" href="/" class="brand-logo"><img src="/images/homeacc_logo_white.png" class="responsive-img" /></a>
+	  </a>
+	  <ul class="right hide-on-med-and-down">
+		<li><a href="/">ОБЗОР</a></li>
+		<li><a href="/">ДЕНЬГИ</a></li>
+		<li><a class="dropdown-button" data-activates="report-list">ОТЧЕТЫ<i class="material-icons right">arrow_drop_down</i></a></li>
+		<ul id="report-list" class="dropdown-content">
+		  <li><a href="/">one</a></li>
+		  <li><a href="/">two</a></li>
+		  <li class="divider"></li>
+		  <li><a href="/">three</a></li>
+		</ul>
+		<li><a class="dropdown-button" data-activates="dict-list">СПРАВОЧНИКИ<i class="material-icons right">arrow_drop_down</i></a></li>
+		<ul id="dict-list" class="dropdown-content">
+		  <li><%= link_to "Контрагенты", :counterparties %></li>
+		  <li><%= link_to "Карты", :cards %></li>
+		  <li><%= link_to "Валюты", :currencies %></li>
+		  <li><%= link_to "Налоги", :taxes %></li>
+		  <li><%= link_to "Категории затрат", :unit_categories %></li>
+		</ul>
+		<li><a href="/">ВЫХОД</a></li>
+	  </ul>
+	  <ul id="slide-out" class="side-nav">
+		<li><a href="/">Обзор</a></li>
+		<li><a href="/">Деньги</a></li>
+		<li><a href="/">Отчеты</a></li>
+		<li><a href="/">Справочники</a></li>
+		<li><a href="/">Выход</a></li>
+	  </ul>
+	  <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+	</div>
+  </nav>
+    <div class="row">
+	  <div class="col s12">
+        <%= yield %>
+      </div>
+    </div>
+	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	<a class="btn-floating btn-large cyan darken-1">
+	  <i class="material-icons">add</i>
+	</a>
+	<ul>
+	  <li><a class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="material-icons">vertical_align_top</i></a></li>
+	  <li><a class="btn-floating green" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="material-icons">vertical_align_bottom</i></a></li>
+	  <li><a class="btn-floating blue darken-4" style="transform: scaleY(0.4) scaleX(0.4) translateY(40px); opacity: 0;"><i class="material-icons">schedule</i></a></li>
+	</ul>
+  </div>
+
+  <div id="confirmation_modal" class="modal">
+    <div class="modal-content">
+      <h4 id="modal_title">Подтердите удаление</h4>
+      <p id="modal_text"></p>
+    </div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Отмена</a>
+		<a href="#!" id="button-confirm" class="modal-action modal-close waves-effect waves-green btn-flat ">Удалить</a>
+	</div>
+  </div>
+
+</body>
+<script>
+  $( document ).ready(function(){
+	$(".button-collapse").sideNav();
+	$(".dropdown-button").dropdown();
+  })
+</script>
+</html>
