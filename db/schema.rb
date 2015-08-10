@@ -42,8 +42,6 @@ ActiveRecord::Schema.define(version: 20150806124111) do
     t.integer  "currency_count", limit: 4
   end
 
-  add_index "currencies", ["cbr_num"], name: "cbr_num", using: :btree
-
   create_table "money_units", force: :cascade do |t|
     t.integer  "counterparty_id",      limit: 4
     t.integer  "currency_id",          limit: 4
