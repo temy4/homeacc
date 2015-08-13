@@ -1,45 +1,3 @@
-<!-- <p id="notice"><%= notice %></p>
-
-<h1>Listing Cards</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Cc type</th>
-      <th>Number short</th>
-      <th>Number full</th>
-      <th>Month end</th>
-      <th>Year end</th>
-      <th>Owner</th>
-      <th>Alias</th>
-      <th>Is active</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @cards.each do |card| %>
-      <tr>
-        <td><%= card.cc_type %></td>
-        <td><%= card.number_short %></td>
-        <td><%= card.number_full %></td>
-        <td><%= card.month_end %></td>
-        <td><%= card.year_end %></td>
-        <td><%= card.owner %></td>
-        <td><%= card.alias %></td>
-        <td><%= card.is_active %></td>
-        <td><%= link_to 'Show', card %></td>
-        <td><%= link_to 'Edit', edit_card_path(card) %></td>
-        <td><%= link_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Card', new_card_path %>-->
-
 <% unless notice.nil? %>
   <input type="hidden" id="notice" value="<%= notice %>" data-type="<%= flash[:type] %>" data-state="<%= flash[:state] %>" data-rollback="<%= flash[:rollback_url] %>" />
 <% end %>
@@ -70,12 +28,10 @@
     <table class="striped">
       <thead>
         <tr>
-          <th>Тип</th> <!-- Cc Type -->
-          <th>Имя</th> <!-- ALias -->
-          <th>Номер</th> <!-- Number short -->
+          <th></th>
+          <th>Карта</th> <!-- ALias -->
           <th>Владелец</th> <!-- Owner -->
           <th>Строк действия</th> <!-- Month end + Year end -->
-          <th colspan="3"></th>
         </tr>
       </thead>
     
@@ -84,16 +40,25 @@
           <tr class="content-label">
             <td>
               <input type="checkbox" class="list-chk visible filled-in" name="cards[]" value="<%= card.id %>" id="card-<%= card.id %>" />
-              <label for="card-<%= card.id %>"><%= card.type %></label>
+              <label for="card-<%= card.id %>"><img src="/images/cards/<%= card.cc_type %>.png" height="20px" alt="<%= card.cc_type.capitalize! %>"/></label>
+            </td>
+            <td>
+              <%= if card.alias.nil? or card.alias.empty? then card.card_number else card.alias end %>
+            </td>
+            <td>
+              <%= unless card.owner.nil? or card.owner.empty? then card.owner else 'Не известен' end %>
+            </td>
+            <td>
+              <%= unless (card.month_end.nil? or card.month_end <= 0) and (card.year_end.nil? or card.year_end <= 0) then month_name(card.month_end) + ' ' + (card.year_end + 2000).to_s else '-/-' end %>
             </td>
             <td>
               <%= link_to card, :class => "btn-floating btn cyan lighten-3" do %>
                 <i class="material-icons">launch</i>
               <% end %>
-              <%= link_to edit_card_path(counterparty), :class => "btn-floating btn teal lighten-3" do %>
+              <%= link_to edit_card_path(card), :class => "btn-floating btn teal lighten-3" do %>
                 <i class="material-icons">edit</i>
               <% end %>
-              <%= link_to card, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить карту "' + card.number_short + '"?' } do %>
+              <%= link_to card, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить карту "' + card.card_number + '"?' } do %>
                 <i class="material-icons">delete</i>
               <% end %>
             </td>

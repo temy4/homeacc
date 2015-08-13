@@ -1,6 +1,19 @@
 # encoding: utf-8
 class Card < ActiveRecord::Base
+	belongs_to :currency
+	validate :check_currency
 	validate :check_card_number
+
+	after_validation(:on => :create) do
+		# self.card_number = self.card_number.gsub!(/^(\d{6})\d+(\d{4})$/, '\1******\2')
+	end
+
+	def check_currency
+		if currency_id.nil? or not Currency.exists?(currency_id)
+			errors.add('Валюта', 'введена неверно')
+			errors[:state] = 'nok';
+		end
+	end
 
 	def check_card_number
 		unless card_number.nil? or card_number.empty?
@@ -24,7 +37,9 @@ class Card < ActiveRecord::Base
 					result += digit.to_i
 				end
 			end
-			card_number = card_number.to_s.gsub(/^(\d{6})\d+(\d{4})$/, '\1******\2')
+
+			masked = number.length - 10
+			self.card_number = number.gsub(/.(?=....)/, '*')
 
 			unless result % 10 == 0
 				errors.add('Ошибка', 'в номере карты')

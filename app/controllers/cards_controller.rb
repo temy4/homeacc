@@ -11,17 +11,20 @@ class CardsController < ApplicationController
   # GET /cards/1
   # GET /cards/1.json
   def show
+    @currencies = Currency.all
   end
 
   # GET /cards/new
   def new
     @action = "new"
     @card = Card.new
+    @currencies = Currency.all
   end
 
   # GET /cards/1/edit
   def edit
     @action = "edit"
+    @currencies = Currency.all
   end
 
   # POST /cards
@@ -92,6 +95,6 @@ class CardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def card_params
-      params.require(:card).permit(:cc_type, :card_number, :month_end, :year_end, :owner, :alias, :is_active)
+      params.require(:card).permit(:cc_type, :currency_id, :card_number, :month_end, :year_end, :owner, :alias, :is_active)
     end
 end

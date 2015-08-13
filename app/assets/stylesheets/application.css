@@ -13,3 +13,9 @@
  *= require_tree .
  *= require_self
  */
+body {
+	-webkit-font-smoothing: subpixel-antialiased !important;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility:    hidden;
+	-ms-backface-visibility:     hidden;
+}

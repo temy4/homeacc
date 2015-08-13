@@ -14,6 +14,14 @@ if rates.size > 0
 	connection = ActiveRecord::Base.connection
 	connection.execute("TRUNCATE TABLE `currencies`")
 
+    cur = Currency.new
+    cur.cbr_num = '000'
+    cur.name = 'Российскийских рублей'
+    cur.sign = 'RUB'
+    cur.currency_count = '1'
+    cur.rate = 1
+    cur.save
+
 	rates.each do |rate|
 	    id = rate.css('NumCode').children.first
 	    name = rate.css('Name').children.first

@@ -3,8 +3,12 @@
     <input type="hidden" id="notice" value="<%= @card.errors.full_messages.first  %>" data-type="error" data-state="<%= @card.errors[:state].first %>" data-rollback="<%= @card.errors[:rollback].first %>" />
   <% end %>
 
-  <% if @action == 'new' %>
-    <% @class = "active" %>
+  <% if @action == 'edit' %>
+    <%
+      @class = "active"
+      @curr = @card.currency
+    %>
+
   <% else %>
     <% @class = nil %>
   <% end %>
@@ -13,6 +17,13 @@
     <div class="input-field col s4">
       <%= f.text_field :alias %>
       <%= f.label "Название карты", :class => @class %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s4">
+      <%= select_tag "выберите валюту", options_from_collection_for_select(@currencies, "id", "name") %>
+      <label>Валюта</label>
     </div>
   </div>
 
@@ -47,7 +58,7 @@
       <%= f.label "Владелец карты", :class => @class %>
     </div>
   </div>
-
+  <%= f.hidden_field :is_active, :value => 1 %>
   <div class="actions">
     <%= link_to 'Отмена', cards_path, :class => "waves-effect waves-light btn red accent-1" %>
     <button class="btn waves-effect waves-light" type="submit" name="commit">Сохранить</button>
