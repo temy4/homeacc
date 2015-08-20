@@ -1,12 +1,5 @@
 <h3>Карточка контрагента</h3>
-<%= form_for(@counterparty) do |f| %>
-  <div class="row">
-    <div class="input-field col s6">
-      <%= f.text_field :counterparty_name, :readonly => 'readonly' %>
-      <%= f.label :Контрагент, :class => "active" %>
-    </div>
-  </div>
-<% end %>
+  <%= render 'form' %>
   <div class="actions">
     <%= link_to 'Отмена', counterparties_path, :class => "waves-effect waves-light btn red accent-1" %>
     <%= link_to 'Редактировать', edit_counterparty_path(@counterparty), :class => "btn waves-effect waves-light" %>

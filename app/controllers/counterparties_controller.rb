@@ -11,6 +11,7 @@ class CounterpartiesController < ApplicationController
   # GET /counterparties/1
   # GET /counterparties/1.json
   def show
+    @action = "show"
   end
 
   # GET /counterparties/new
@@ -67,8 +68,7 @@ class CounterpartiesController < ApplicationController
   end
   
   def destroy_multiple
-    Counterparty.destroy(params[:counterparties])
-
+    Counterparty.where(:id => params[:counterparties]).update_all('is_active = 0')
     respond_to do |format|
       format.html { redirect_to counterparties_url, flash: { notice: 'Контрагенты были удалены', type: 'updated', state: 'ok', rollback_url: "" } }
       format.json { head :no_content }

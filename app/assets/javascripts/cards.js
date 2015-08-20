@@ -155,6 +155,13 @@ $(document).on('ready page:load', function(){
             $('#card_cc_type').val('');
         }
     })
-    
-    $('#card_card_number').mask('0000 0000 0000 0000');
+    $.jMaskGlobals = {
+       translation: {
+           '0': {pattern: /\d/},
+           '9': {pattern: /\d/, optional: true},
+           '#': {pattern: /\d/, recursive: true},
+           'A': {pattern: /[\*0-9]/},
+       }
+     };
+    $('#card_card_number').mask('AAAA AAAA AAAA ####');
 })

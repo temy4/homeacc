@@ -2,7 +2,9 @@
 class Card < ActiveRecord::Base
 	belongs_to :currency
 	validate :check_currency
-	validate :check_card_number
+	validate :check_card_number, on: :create
+	validate :check_card_number_update, on: :update
+	validate :check_date
 
 	after_validation(:on => :create) do
 		# self.card_number = self.card_number.gsub!(/^(\d{6})\d+(\d{4})$/, '\1******\2')
@@ -49,5 +51,20 @@ class Card < ActiveRecord::Base
 			errors.add('Номер карты', 'не указан')
 			errors[:state] = 'nok';
 		end
+	end
+	
+	def check_card_number_update
+		if self.card_number.match('^[\d\s]{9,}$')
+			check_card_number()
+		else
+			unless self.card_number.match('^[\*\s]+\d{4}$')
+				errors.add('Ошибка', 'в номере карты')
+				errors[:state] = 'nok';
+			end
+		end
+	end
+	
+	def check_date
+		
 	end
 end

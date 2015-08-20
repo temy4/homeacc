@@ -11,6 +11,7 @@ class CardsController < ApplicationController
   # GET /cards/1
   # GET /cards/1.json
   def show
+    @action = "show"
     @currencies = Currency.all
   end
 
@@ -33,7 +34,13 @@ class CardsController < ApplicationController
     @card = Card.new(card_params)
     respond_to do |format|
       if @card.save
-        format.html { redirect_to cards_url, flash: { notice: 'Карта "' + @card.card_number + '" была добавлена', type: 'created', state: 'ok' } }
+        card_name = @card.card_number
+        if @card.alias.nil? or @card.alias.empty?
+          card_name = @card.card_number
+        else
+          card_name = @card.alias
+        end
+        format.html { redirect_to cards_url, flash: { notice: 'Карта "' + card_name + '" была добавлена', type: 'created', state: 'ok' } }
         format.json { render :show, status: :created, location: @card }
       else
         format.html { render :new }
@@ -44,10 +51,16 @@ class CardsController < ApplicationController
 
   # PATCH/PUT /cards/1
   # PATCH/PUT /cards/1.json
-  def update
+  def update    
     respond_to do |format|
       if @card.update(card_params)
-        format.html { redirect_to cards_url, flash: { notice: 'Карта "' + @card.card_number + '" была изменена', type: 'updated', state: 'ok' } }
+        card_name = @card.card_number
+        if @card.alias.nil? or @card.alias.empty?
+          card_name = @card.card_number
+        else
+          card_name = @card.alias
+        end
+        format.html { redirect_to cards_url, flash: { notice: 'Карта "' + card_name + '" была изменена', type: 'updated', state: 'ok' } }
         format.json { render :show, status: :ok, location: @card }
       else
         format.html { render :edit }
@@ -63,13 +76,13 @@ class CardsController < ApplicationController
     @card.is_active = 0
     @card.save
     respond_to do |format|
-      format.html { redirect_to counterparties_url, flash: { notice: 'Карта была удалена', type: 'deleted', state: 'ok', rollback_url: "/cards/#{params[:id]}/recover" } }
+      format.html { redirect_to cards_url, flash: { notice: 'Карта была удалена', type: 'deleted', state: 'ok', rollback_url: "/cards/#{params[:id]}/recover" } }
       format.json { head :no_content }
     end
   end
   
   def destroy_multiple
-    Card.destroy(params[:cards])
+    Card.where(:id => params[:cards]).update_all('is_active = 0')
 
     respond_to do |format|
       format.html { redirect_to cards_url, flash: { notice: 'Карты были удалены', type: 'updated', state: 'ok', rollback_url: "" } }
@@ -82,7 +95,13 @@ class CardsController < ApplicationController
     @card.is_active = 1
     @card.save
     respond_to do |format|
-      format.html { redirect_to counterparties_url, flash: { notice: 'Карта "' + @card.card_number + '" была восстановлена', type: 'updated', state: 'ok' } }
+      card_name = @card.card_number
+      if @card.alias.nil? or @card.alias.empty?
+        card_name = @card.card_number
+      else
+        card_name = @card.alias
+      end
+      format.html { redirect_to cards_url, flash: { notice: 'Карта "' + card_name + '" была восстановлена', type: 'updated', state: 'ok' } }
       format.json { head :no_content }
     end
   end

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   # GET routes
   get 'welcome/index'
   get 'counterparties/:id/recover' => 'counterparties#recover'
-  
+  get 'cards/:id/recover' => 'cards#recover'
   # POST routes
 
   # PUT routes

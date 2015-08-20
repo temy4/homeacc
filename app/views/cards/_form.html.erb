@@ -3,7 +3,7 @@
     <input type="hidden" id="notice" value="<%= @card.errors.full_messages.first  %>" data-type="error" data-state="<%= @card.errors[:state].first %>" data-rollback="<%= @card.errors[:rollback].first %>" />
   <% end %>
 
-  <% if @action == 'edit' %>
+  <% if @action == 'edit' or @action == 'show' %>
     <%
       @class = "active"
       @curr = @card.currency
@@ -12,24 +12,32 @@
   <% else %>
     <% @class = nil %>
   <% end %>
-
+  <% if @action == 'show' %>
+    <% @readonly = ' "readonly"' %>
+  <% else %>
+    <% @readonly = nil %>
+  <% end %>
   <div class="row">
     <div class="input-field col s4">
-      <%= f.text_field :alias %>
+      <%= f.text_field :alias, :readonly => @readonly %>
       <%= f.label "Название карты", :class => @class %>
     </div>
   </div>
 
   <div class="row">
     <div class="input-field col s4">
-      <%= select_tag "выберите валюту", options_from_collection_for_select(@currencies, "id", "name") %>
+      <% if @action == 'show' %>
+        <%= f.text_field :currency_id, :readonly => @readonly, :value => @card.currency.name  %>
+      <% else %> 
+        <%= f.collection_select(:currency_id, Currency.all, :id, :name) %>
+      <% end %>
       <label>Валюта</label>
     </div>
   </div>
 
   <div class="row">
     <div class="input-field col s4">
-      <%= f.text_field :card_number, :maxlength => 19 %>
+      <%= f.text_field :card_number, :maxlength => 19, :readonly => @readonly  %>
       <%= f.label "Номер карты", :class => @class %>
       <%= f.hidden_field :cc_type %>
     </div>
@@ -39,28 +47,41 @@
   </div>
   
   <div class="row">
-    <div class="input-field col s12">
+    <div class="col s12">
       <p class="caption">Срок действия</p>
     </div>
+  </div>
+  
+  <div class="row">
     <div class="input-field col s2">
-      <%= f.text_field :month_end %>
-      <%= f.label "Месяц (ММ)", :class => @class %>
+      <% if @action == 'show' %>
+        <%= f.text_field :month_end, :readonly => @readonly  %>
+      <% else %> 
+        <%= f.select :month_end, ((1..12).map {|i| [i,i] }) %>
+      <% end %>
+      <%= f.label "Месяц"%>
     </div>
     <div class="input-field col s2">
-      <%= f.text_field :year_end %>
-      <%= f.label "Год (ГГ)", :class => @class %>
+      <% if @action == 'show' %>
+        <%= f.text_field :year_end, :readonly => @readonly  %>
+      <% else %> 
+        <%= f.select :year_end, ((Time.now.year..Time.now.year+10).map {|i| [i,i] }) %>
+      <% end %>
+      <%= f.label "Год"%>
     </div>
   </div>
 
   <div class="row">
     <div class="input-field col s4">
-      <%= f.text_field :owner %>
+      <%= f.text_field :owner, :readonly => @readonly %>
       <%= f.label "Владелец карты", :class => @class %>
     </div>
   </div>
-  <%= f.hidden_field :is_active, :value => 1 %>
-  <div class="actions">
-    <%= link_to 'Отмена', cards_path, :class => "waves-effect waves-light btn red accent-1" %>
-    <button class="btn waves-effect waves-light" type="submit" name="commit">Сохранить</button>
-  </div>
+  <% unless @action == 'show' %>
+    <%= f.hidden_field :is_active, :value => 1 %>
+    <div class="actions">
+      <%= link_to 'Отмена', cards_path, :class => "waves-effect waves-light btn red accent-1" %>
+      <button class="btn waves-effect waves-light" type="submit" name="commit">Сохранить</button>
+    </div>
+  <% end %>
 <% end %>

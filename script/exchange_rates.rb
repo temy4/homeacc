@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'nokogiri'
 require 'open-uri'
 require 'date'
@@ -16,7 +17,7 @@ if rates.size > 0
 
     cur = Currency.new
     cur.cbr_num = '000'
-    cur.name = 'Российскийских рублей'
+    cur.name = 'Российскийский рубль'
     cur.sign = 'RUB'
     cur.currency_count = '1'
     cur.rate = 1
