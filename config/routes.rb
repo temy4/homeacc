@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   resources :unit_categories
   resources :taxes
   resources :exchange_rates
-  resources :currencies
   resources :counterparties
   
   # custom routes
@@ -12,6 +11,9 @@ Rails.application.routes.draw do
   get 'welcome/index'
   get 'counterparties/:id/recover' => 'counterparties#recover'
   get 'cards/:id/recover' => 'cards#recover'
+  
+  get 'currencies' => 'currencies#index'
+  get 'currencies/update_all' => 'currencies#update_all'
   # POST routes
 
   # PUT routes
