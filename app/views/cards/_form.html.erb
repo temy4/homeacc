@@ -31,7 +31,7 @@
       <% else %> 
         <%= f.collection_select(:currency_id, Currency.all, :id, :name) %>
       <% end %>
-      <label>Валюта</label>
+      <%= f.label "Валюта", :class => @class %>
     </div>
   </div>
 
@@ -59,7 +59,7 @@
       <% else %> 
         <%= f.select :month_end, ((1..12).map {|i| [i,i] }) %>
       <% end %>
-      <%= f.label "Месяц"%>
+      <%= f.label "Месяц", :class => @class %>
     </div>
     <div class="input-field col s2">
       <% if @action == 'show' %>
@@ -67,7 +67,7 @@
       <% else %> 
         <%= f.select :year_end, ((Time.now.year..Time.now.year+10).map {|i| [i,i] }) %>
       <% end %>
-      <%= f.label "Год"%>
+      <%= f.label "Год", :class => @class %>
     </div>
   </div>
 
