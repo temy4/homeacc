@@ -23,7 +23,7 @@
     <label for="from_cur">Количество</label>
   </div>
   <div class="input-field col s2">
-    <%= collection_select(:currency, :sign, Currency.all, :id, :name, {rate: :rate}) %>
+    <%= collection_select :currency, :sign, Currency.all.map {|c| [{:name => c.first.name, :rate => c.rate, :count => c.currency_count}]}, :id, :name %>
   </div>
   
   <div class="input-field col s1">
