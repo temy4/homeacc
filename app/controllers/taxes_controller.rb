@@ -61,6 +61,15 @@ class TaxesController < ApplicationController
     end
   end
 
+  def destroy_multiple
+    Tax.where(:id => params[:taxes]).update_all('is_active = 0')
+
+    respond_to do |format|
+      format.html { redirect_to cards_url, flash: { notice: 'Налоговые статьи были удалены', type: 'updated', state: 'ok', rollback_url: "" } }
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tax

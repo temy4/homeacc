@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150810202723) do
+ActiveRecord::Schema.define(version: 20150827145000) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -43,8 +43,6 @@ ActiveRecord::Schema.define(version: 20150810202723) do
     t.integer  "currency_count", limit: 4
   end
 
-  add_index "currencies", ["cbr_num"], name: "cbr_num", using: :btree
-
   create_table "money_units", force: :cascade do |t|
     t.integer  "counterparty_id",      limit: 4
     t.integer  "currency_id",          limit: 4
@@ -67,6 +65,7 @@ ActiveRecord::Schema.define(version: 20150810202723) do
     t.text     "desc",       limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.boolean  "is_active"
   end
 
   create_table "unit_categories", force: :cascade do |t|

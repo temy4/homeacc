@@ -1,29 +1,54 @@
 <%= form_for(@tax) do |f| %>
   <% if @tax.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tax.errors.count, "error") %> prohibited this tax from being saved:</h2>
-
-      <ul>
-      <% @tax.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+    <input type="hidden" id="notice" value="<%= @tax.errors.full_messages.first  %>" data-type="error" data-state="<%= @tax.errors[:state].first %>" data-rollback="<%= @tax.errors[:rollback].first %>" />
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+
+  <div class="row">
+    <div class="input-field col s5">
+      <% if @action == 'show' %>
+        <%= f.text_field :name, :readonly => 'readonly' %>
+      <% else %>
+        <%= f.text_field :name %>
+      <% end %>
+      <% if @action == 'new' %>
+        <%= f.label :Налог %>
+      <% else %>
+        <%= f.label :Налог, :class => "active" %>
+      <% end %>
+    </div>
+    <div class="input-field col s1">
+      <% if @action == 'show' %>
+        <%= f.text_field :percent, :readonly => 'readonly' %>
+      <% else %>
+        <%= f.text_field :percent %>
+      <% end %>
+      <% if @action == 'new' %>
+        <%= f.label :Процент %>
+      <% else %>
+        <%= f.label :Процент, :class => "active" %>
+      <% end %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :percent %><br>
-    <%= f.text_field :percent %>
+
+  <div class="row">
+    <div class="input-field col s6">
+      <% if @action == 'show' %>
+        <%= f.text_area :desc, :readonly => 'readonly', :class => "materialize-textarea" %>
+      <% else %>
+        <%= f.text_area :desc, :class => "materialize-textarea" %>
+      <% end %>
+      <% if @action == 'new' %>
+        <%= f.label :Описание %>
+      <% else %>
+        <%= f.label :Описание, :class => "active" %>
+      <% end %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :desc %><br>
-    <%= f.text_area :desc %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <% unless @action == 'show' %>
+    <div class="actions">
+      <%= link_to 'Отмена', taxes_path, :class => "waves-effect waves-light btn red accent-1" %>
+      <button class="btn waves-effect waves-light" type="submit" name="commit">Сохранить</button>
+    </div>
+  <% end %>
 <% end %>

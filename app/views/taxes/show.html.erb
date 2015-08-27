@@ -1,19 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @tax.name %>
-</p>
-
-<p>
-  <strong>Percent:</strong>
-  <%= @tax.percent %>
-</p>
-
-<p>
-  <strong>Desc:</strong>
-  <%= @tax.desc %>
-</p>
-
-<%= link_to 'Edit', edit_tax_path(@tax) %> |
-<%= link_to 'Back', taxes_path %>
+<h3>Карточка налога</h3>
+  <%= render 'form' %>
+  <div class="actions">
+    <%= link_to 'Отмена', taxes_path, :class => "waves-effect waves-light btn red accent-1" %>
+    <%= link_to 'Редактировать', edit_tax_path(@tax), :class => "btn waves-effect waves-light" %>
+  </div>
