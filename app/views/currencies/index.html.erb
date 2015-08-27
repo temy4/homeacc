@@ -19,19 +19,27 @@
 
 <div class="row">
   <div class="input-field col s1">
-    <input id="from_cur" type="text">
-    <label for="from_cur">Количество</label>
+    <input id="from_currency_count" value="1.00" type="text">
+    <label for="from_currency_count" id="from_curr_lbl" class="active">Количество</label>
   </div>
   <div class="input-field col s2">
-    <%= collection_select :currency, :sign, Currency.all.map {|c| [{:name => c.first.name, :rate => c.rate, :count => c.currency_count}]}, :id, :name %>
+    <select id="from_currency">
+      <% Currency.all.each do |c| %>
+        <option value="<%= c.rate %>" data-count="<%= c.currency_count %>" data-ref="<%= c.cbr_num %>"><%= c.name %></option>
+      <% end %>
+    <select>
   </div>
   
   <div class="input-field col s1">
-    <input id="to_cur" type="text">
-    <label for="to_cur">Количество</label>
+    <input id="to_currency_count" value="1.00" type="text" readonly>
+    <label for="to_currency_count" id="to_curr_lbl" class="active">Количество</label>
   </div>
   <div class="input-field col s2">
-    <%= collection_select(:currency, :sign, Currency.all, :id, :name, {rate: :rate}) %>
+    <select id="to_currency">
+      <% Currency.all.each do |c| %>
+        <option value="<%= c.rate %>" data-count="<%= c.currency_count %>" data-ref="<%= c.cbr_num %>"><%= c.name %></option>
+      <% end %>
+    <select>
   </div>
 </div>
 
@@ -70,5 +78,51 @@ $( document ).ready(function(){
       $( "tr.content-label:contains('" + text + "') .list-chk" ).addClass('visible');
     }
   })
+  $('#from_currency, #to_currency').on('change', function(){
+    if (!$('#from_currency_count').val()){
+      $('#from_curr_lbl').addClass('active')
+      $('#from_currency_count').val(1.00)
+    }
+    if (!$('#to_currency_count').val()){
+      $('#to_curr_lbl').addClass('active')
+      $('#to_currency_count').val(1.00)
+    }
+    __convert_currency();
+  })
+  $('#from_currency_count').on('keyup paste', function(){
+    __convert_currency()
+  })
+
+  function __convert_currency(){
+    from_rate = $('option:selected', '#from_currency').val();
+    from_count = $('option:selected', '#from_currency').attr('data-count');
+    from_ref = $('option:selected', '#from_currency').attr('data-ref');
+    convert_from_val = $('#from_currency_count').val()
+
+    to_rate = $('option:selected', '#to_currency').val();
+    to_count = $('option:selected', '#to_currency').attr('data-count');
+    to_ref = $('option:selected', '#to_currency').attr('data-ref');
+    convert_to_val = $('#to_currency_count').val()
+
+    if (from_ref == '000'){
+      num = convert_from_val / (to_rate / to_count);
+      $('#to_currency_count').val(num.toFixed(2));
+    }
+
+    if (to_ref == '000'){
+      num = convert_from_val * (from_rate / from_count);
+      $('#to_currency_count').val(num.toFixed(2));
+    }
+
+    if (from_ref != '000' && to_ref != '000'){
+      rur_for_from = from_rate / from_count
+      rur_for_to = to_rate / to_count
+      rate = rur_for_from / rur_for_to
+      
+      num = rate * convert_from_val
+
+      $('#to_currency_count').val(num.toFixed(2));
+    }
+  }
 })
 </script>
