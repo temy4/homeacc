@@ -4,31 +4,36 @@ class TaxesController < ApplicationController
   # GET /taxes
   # GET /taxes.json
   def index
-    @taxes = Tax.all
+    @taxes = Tax.where('is_active = 1')
   end
 
   # GET /taxes/1
   # GET /taxes/1.json
   def show
+    @action = "show"
+    @taxes = Tax.where('is_active = 1')
   end
 
   # GET /taxes/new
   def new
+    @action = "new"
     @tax = Tax.new
+    @taxes = Tax.where('is_active = 1')
   end
 
   # GET /taxes/1/edit
   def edit
+    @action = "edit"
+    @taxes = Tax.where('is_active = 1')
   end
 
   # POST /taxes
   # POST /taxes.json
   def create
     @tax = Tax.new(tax_params)
-
     respond_to do |format|
       if @tax.save
-        format.html { redirect_to @tax, notice: 'Tax was successfully created.' }
+        format.html { redirect_to @tax, notice: 'Налог был успешно добавлен', type: 'created', state: 'ok' }
         format.json { render :show, status: :created, location: @tax }
       else
         format.html { render :new }
@@ -42,7 +47,7 @@ class TaxesController < ApplicationController
   def update
     respond_to do |format|
       if @tax.update(tax_params)
-        format.html { redirect_to @tax, notice: 'Tax was successfully updated.' }
+        format.html { redirect_to @tax, notice: 'Налог был успешно обновлен', type: 'created', state: 'ok' }
         format.json { render :show, status: :ok, location: @tax }
       else
         format.html { render :edit }
@@ -54,9 +59,10 @@ class TaxesController < ApplicationController
   # DELETE /taxes/1
   # DELETE /taxes/1.json
   def destroy
-    @tax.destroy
+    @tax.is_active = 0
+    @tax.save
     respond_to do |format|
-      format.html { redirect_to taxes_url, notice: 'Tax was successfully destroyed.' }
+      format.html { redirect_to taxes_url, flash: { notice: 'Налог был удален', type: 'deleted', state: 'ok', rollback_url: "/taxes/#{params[:id]}/recover" } }
       format.json { head :no_content }
     end
   end
@@ -65,7 +71,17 @@ class TaxesController < ApplicationController
     Tax.where(:id => params[:taxes]).update_all('is_active = 0')
 
     respond_to do |format|
-      format.html { redirect_to cards_url, flash: { notice: 'Налоговые статьи были удалены', type: 'updated', state: 'ok', rollback_url: "" } }
+      format.html { redirect_to cards_url, flash: { notice: 'Выбранные налоги были удалены', type: 'updated', state: 'ok', rollback_url: "" } }
+      format.json { head :no_content }
+    end
+  end
+
+  def recover
+    @tax.is_active = 1
+    @tax.save
+    respond_to do |format|
+      tax_name = @tax.name
+      format.html { redirect_to cards_url, flash: { notice: 'Налог "' + tax_name + '" был восстановлен', type: 'updated', state: 'ok' } }
       format.json { head :no_content }
     end
   end

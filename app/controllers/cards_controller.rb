@@ -12,20 +12,20 @@ class CardsController < ApplicationController
   # GET /cards/1.json
   def show
     @action = "show"
-    @currencies = Currency.all
+    @currencies = Currency.where('is_active = 1')
   end
 
   # GET /cards/new
   def new
     @action = "new"
     @card = Card.new
-    @currencies = Currency.all
+    @currencies = Currency.where('is_active = 1')
   end
 
   # GET /cards/1/edit
   def edit
     @action = "edit"
-    @currencies = Currency.all
+    @currencies = Currency.where('is_active = 1')
   end
 
   # POST /cards

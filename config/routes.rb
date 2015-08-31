@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
   get 'counterparties/:id/recover' => 'counterparties#recover'
   get 'cards/:id/recover' => 'cards#recover'
+  get 'taxes/:id/recover' => 'taxes#recover'
   
   get 'currencies' => 'currencies#index'
   get 'currencies/update_all' => 'currencies#update_all'
