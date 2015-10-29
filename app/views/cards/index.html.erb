@@ -43,13 +43,14 @@
               <label for="card-<%= card.id %>"><img src="/images/cards/<%= card.cc_type %>.png" height="20px" alt="<%= card.cc_type.capitalize! %>"/></label>
             </td>
             <td>
-              <%= if card.alias.nil? or card.alias.empty? then card.card_number else card.alias end %>
+              <label for="card-<%= card.id %>"><%= if card.alias.nil? or card.alias.empty? then card.card_number else card.alias end %></label>
+              <span class="hidden"><%= card.card_number %></span>
             </td>
             <td>
-              <%= unless card.owner.nil? or card.owner.empty? then card.owner else 'Не известен' end %>
+              <label for="card-<%= card.id %>"><%= unless card.owner.nil? or card.owner.empty? then card.owner else 'Не известен' end %></label>
             </td>
             <td>
-              <%= unless (card.month_end.nil? or card.month_end <= 0) and (card.year_end.nil? or card.year_end <= 0) then month_name(card.month_end) + ' ' + card.year_end.to_s else '-/-' end %>
+              <label for="card-<%= card.id %>"><%= unless (card.month_end.nil? or card.month_end <= 0) and (card.year_end.nil? or card.year_end <= 0) then month_name(card.month_end) + ' ' + card.year_end.to_s else '-/-' end %></label>
             </td>
             <td>
               <%= link_to card, :class => "btn-floating btn cyan lighten-3" do %>

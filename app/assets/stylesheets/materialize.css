@@ -8145,3 +8145,12 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 h1, h2, h3, h4 {
   color: #00bcd4
 }
+
+.content-label label {
+  color: #000;
+  font-size: 1em
+}
+
+.hidden{
+  display: none;
+}
