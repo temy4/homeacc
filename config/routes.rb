@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'counterparties/:id/recover' => 'counterparties#recover'
   get 'cards/:id/recover' => 'cards#recover'
   get 'taxes/:id/recover' => 'taxes#recover'
+  get 'unit_categories/:id/recover' => 'unit_categories#recover'
   
   get 'currencies' => 'currencies#index'
   get 'currencies/update_all' => 'currencies#update_all'
@@ -33,6 +34,12 @@ Rails.application.routes.draw do
   end
 
   resources :taxes do
+    collection do
+      post 'destroy_multiple'
+    end
+  end
+
+  resources :unit_categories do
     collection do
       post 'destroy_multiple'
     end

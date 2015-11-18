@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150827145000) do
+ActiveRecord::Schema.define(version: 20151029134905) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -63,15 +63,17 @@ ActiveRecord::Schema.define(version: 20150827145000) do
     t.string   "name",       limit: 255
     t.float    "percent",    limit: 24
     t.text     "desc",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.boolean  "is_active"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "is_active",                default: true
   end
 
   create_table "unit_categories", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",            limit: 255
+    t.integer  "counterparty_id", limit: 4
+    t.boolean  "is_active"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
 end
