@@ -1,27 +1,119 @@
-<p id="notice"><%= notice %></p>
+<% unless notice.nil? %>
+  <input type="hidden" id="notice" value="<%= notice %>" data-type="<%= flash[:type] %>" data-state="<%= flash[:state] %>" data-rollback="<%= flash[:rollback_url] %>" />
+<% end %>
+<h3 class="header">Категории доходов и затрат</h3>
 
-<h1>Listing Unit Categories</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @unit_categories.each do |unit_category| %>
-      <tr>
-        <td><%= unit_category.name %></td>
-        <td><%= link_to 'Show', unit_category %></td>
-        <td><%= link_to 'Edit', edit_unit_category_path(unit_category) %></td>
-        <td><%= link_to 'Destroy', unit_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+<div class="row">
+  <div class="input-field col s6">
+    <input id="search_field" type="text">
+    <label for="search_field">Поиск</label>
+  </div>
+</div>
+<%= form_tag destroy_multiple_unit_categories_path, method: :post, :id => 'items-list' do %>
+<div class="row">
+  <div class="col s12">
+    <a class="waves-effect waves-light btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
+    <%= link_to new_unit_category_path, :class => "waves-effect waves-light btn" do %>
+      <i class="material-icons left">add</i>Добавить</a>
     <% end %>
-  </tbody>
-</table>
 
-<br>
+    <button id="btd_delete" class="waves-effect waves-light btn red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранных контрагентов?" rel="nofollow" data-method="delete">
+      <i class="material-icons left">delete</i>Удалить
+    </button>
+  </div>
+</div>
 
-<%= link_to 'New Unit category', new_unit_category_path %>
+<div class="row">
+  <div class="col s12">
+    <table class="striped">
+      <!--<thead>
+        <tr>
+          <th>unit_category name</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>-->
+    
+      <tbody>
+        <% @unit_categories.each do |unit_category| %>
+          <tr class="content-label">
+            <td>
+
+              <input type="checkbox" class="list-chk visible filled-in" name="unit_categories[]" value="<%= unit_category.id %>" id="unit_category-<%= unit_category.id %>" />
+              <label for="unit_category-<%= unit_category.id %>"><%= unit_category.name %></label>
+            </td>
+            <td>
+              <label for="unit_category-<%= unit_category.id %>"><%= unit_category.counterparty.nil? ? raw('<i>Не указан</i>') : unit_category.counterparty.counterparty_name %></label>
+            </td>
+            <td>
+              <%= link_to unit_category, :class => "btn-floating btn cyan lighten-3" do %>
+                <i class="material-icons">launch</i>
+              <% end %>
+              <%= link_to edit_unit_category_path(unit_category), :class => "btn-floating btn teal lighten-3" do %>
+                <i class="material-icons">edit</i>
+              <% end %>
+              <%= link_to unit_category, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить контрагента "' + unit_category.name + '"?' } do %>
+                <i class="material-icons">delete</i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+
+$( document ).ready(function(){
+  $('#btn_select_all').on('click', function(){
+    $(".list-chk:not(.visible)").prop('checked', false);
+    $(".list-chk.visible").prop('checked', !($('.list-chk.visible:checked').size() == $(".list-chk.visible").size()) );
+    check_any_selected();
+    check_all_selected();
+  })
+
+  $(".list-chk.visible").change(function(){
+    check_any_selected();
+    check_all_selected();
+  })
+
+  function check_all_selected(){
+    if( $('.list-chk.visible:checked').size() == $(".list-chk.visible").size() && $(".list-chk.visible").size() > 0 ){
+      $('#cb_chk_all_icon').text('check_box');
+      $('#cb_chk_all_text').text('Снять выделение');
+      return true;
+    }
+    else{
+      $('#cb_chk_all_icon').text('check_box_outline_blank');
+      $('#cb_chk_all_text').text('Выделить все');
+      return false;
+    }
+  }
+  function check_any_selected(){
+    if ($('.list-chk.visible:checked').size() > 0 ){
+      $('#btd_delete').removeClass('disabled');
+      return true;
+    }
+    else{
+      $('#btd_delete').addClass('disabled');
+      return false;
+    }
+  }
+
+  $('#search_field').on('keyup paste', function(){
+    text = $(this).val();
+    $('tr.content-label').show();
+    $('.list-chk').addClass('visible');
+    if(text.length > 0){
+      $('tr.content-label').hide();
+      $('.list-chk').removeClass('visible');
+      $( "tr.content-label:contains('" + text + "')" ).show();
+      $( "tr.content-label:contains('" + text + "') .list-chk" ).addClass('visible');
+    }
+    check_all_selected();
+  })
+
+  check_any_selected();
+  check_all_selected();
+})
+</script>

@@ -5,7 +5,7 @@ class UnitCategoriesController < ApplicationController
   # GET /unit_categories
   # GET /unit_categories.json
   def index
-    @unit_categories = UnitCategory.where('is_active = 1')
+    @unit_categories = UnitCategory.where('is_active = 1').order('name')
   end
 
   # GET /unit_categories/1
@@ -93,6 +93,6 @@ class UnitCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def unit_category_params
-      params.require(:unit_category).permit(:name)
+      params.require(:unit_category).permit(:name, :counterparty_id)
     end
 end

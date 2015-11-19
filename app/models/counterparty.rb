@@ -3,7 +3,7 @@ class Counterparty < ActiveRecord::Base
 	validates :counterparty_name, presence: true
 	validate :check_existed
 
-  belongs_to :unit_category
+  has_many :unit_categories
   
   def is_deleted?
     is_active == 0

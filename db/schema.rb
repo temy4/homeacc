@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20151029134905) do
     t.integer  "year_end",    limit: 4
     t.string   "owner",       limit: 255
     t.string   "alias",       limit: 255
-    t.boolean  "is_active"
+    t.boolean  "is_active",                default: true
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "currency_id", limit: 4
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20151029134905) do
     t.integer  "next_period_price",    limit: 4
     t.date     "current_period"
     t.date     "next_period"
-    t.boolean  "is_active"
+    t.boolean  "is_active",                default: true
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20151029134905) do
   create_table "unit_categories", force: :cascade do |t|
     t.string   "name",            limit: 255
     t.integer  "counterparty_id", limit: 4
-    t.boolean  "is_active"
+    t.boolean  "is_active",                default: true
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
