@@ -4,12 +4,12 @@
 <h3 class="header">Валюты</h3>
 <blockquote>
   <p>информация о валютах загружается автоматически с сайта Центрального Банка и не может быть скорректирована пользователем<br/>
-  обновлено: <strong><%= Currency.last.updated_at.strftime("%d.%m.%Y %H:%M:%S") %></strong></p>
+  обновлено: <strong><%= Currency.last.nil? ? 'Нет данных' : Currency.last.updated_at.strftime("%d.%m.%Y %H:%M:%S") %></strong></p>
   <%= link_to currencies_update_all_path, :class => "waves-effect waves-light btn green darken-1" do %>
     <i class="material-icons left">autorenew</i>Обновить</a>
   <% end %>
 </blockquote>
-
+<% unless Currency.all.nil?  %>
 <div class="row">
   <div class="input-field col s6">
     <input id="search_field" type="text">
@@ -126,3 +126,4 @@ $( document ).ready(function(){
   }
 })
 </script>
+<% end %>
