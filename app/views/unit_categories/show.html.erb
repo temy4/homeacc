@@ -1,9 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @unit_category.name %>
-</p>
-
-<%= link_to 'Edit', edit_unit_category_path(@unit_category) %> |
-<%= link_to 'Back', unit_categories_path %>
+<h3>Карточка категории</h3>
+  <%= render 'form' %>
+  <div class="actions">
+    <%= link_to 'Отмена', unit_categories_path, :class => "waves-effect waves-light btn red accent-1" %>
+    <%= link_to 'Редактировать', edit_unit_category_path(@unit_category), :class => "btn waves-effect waves-light" %>
+  </div>

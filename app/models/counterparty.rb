@@ -24,6 +24,7 @@ class Counterparty < ActiveRecord::Base
   	if Counterparty.where(:counterparty_name => counterparty_name, :is_active => 1).size > 0
   		errors.add('Контрагент', "уже существует")
   		errors[:state] = 'nok';
+  		errors[:code] = 900;
   	end
 
   	if Counterparty.where(:counterparty_name => counterparty_name, :is_active => 0).size > 0
@@ -31,6 +32,7 @@ class Counterparty < ActiveRecord::Base
   		existed = Counterparty.where(:counterparty_name => counterparty_name, :is_active => 0).first.id
   		errors[:state] = 'ok';
   		errors[:rollback] = "/counterparties/#{existed.to_s}/recover";
+  		errors[:code] = 901;
   	end
   end
 
