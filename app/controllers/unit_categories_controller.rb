@@ -24,7 +24,17 @@ class UnitCategoriesController < ApplicationController
   def edit
     @action = "edit"
   end
-
+  
+  def get_refernces
+    unless params[:id].empty?
+      @unit_category = UnitCategory.find(params[:id])
+      @ref = [ @unit_category.counterparty, @unit_category.tax ]
+      respond_to do |format|
+        format.json { render json: @ref }
+      end
+    end
+  end
+  
   # POST /unit_categories
   # POST /unit_categories.json
   def create
@@ -84,7 +94,7 @@ class UnitCategoriesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_unit_category
@@ -93,6 +103,6 @@ class UnitCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def unit_category_params
-      params.require(:unit_category).permit(:name, :counterparty_id)
+      params.require(:unit_category).permit(:name, :counterparty_id, :tax_id)
     end
 end

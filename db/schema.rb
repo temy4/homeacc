@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119210304) do
+ActiveRecord::Schema.define(version: 20170420175423) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -25,6 +25,21 @@ ActiveRecord::Schema.define(version: 20151119210304) do
     t.datetime "updated_at",                             null: false
     t.integer  "currency_id", limit: 4
   end
+
+  create_table "categories_groups", force: :cascade do |t|
+    t.string   "alias",      limit: 255
+    t.boolean  "is_active",              default: true
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "categories_groups_unit_categories", id: false, force: :cascade do |t|
+    t.integer "unit_category_id",    limit: 4
+    t.integer "categories_group_id", limit: 4
+  end
+
+  add_index "categories_groups_unit_categories", ["categories_group_id"], name: "index_categories_groups_unit_categories_on_categories_group_id", using: :btree
+  add_index "categories_groups_unit_categories", ["unit_category_id"], name: "index_categories_groups_unit_categories_on_unit_category_id", using: :btree
 
   create_table "counterparties", force: :cascade do |t|
     t.string   "counterparty_name", limit: 255
@@ -43,20 +58,27 @@ ActiveRecord::Schema.define(version: 20151119210304) do
     t.integer  "currency_count", limit: 4
   end
 
+  create_table "money_transactions", force: :cascade do |t|
+    t.integer  "money_unit_id",           limit: 4
+    t.integer  "ref_last_transaction_id", limit: 4
+    t.float    "amount",                  limit: 24
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
   create_table "money_units", force: :cascade do |t|
-    t.integer  "counterparty_id",      limit: 4
-    t.integer  "currency_id",          limit: 4
-    t.integer  "tax_id",               limit: 4
-    t.string   "type",                 limit: 255
-    t.string   "name",                 limit: 255
-    t.string   "period",               limit: 255
-    t.integer  "current_period_price", limit: 4
-    t.integer  "next_period_price",    limit: 4
-    t.date     "current_period"
-    t.date     "next_period"
-    t.boolean  "is_active",                        default: true
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.date     "transaction_date"
+    t.integer  "unit_category_id", limit: 4
+    t.integer  "counterparty_id",  limit: 4
+    t.integer  "currency_id",      limit: 4
+    t.integer  "tax_id",           limit: 4
+    t.string   "transaction_type", limit: 255
+    t.string   "name",             limit: 255
+    t.string   "job_description",  limit: 255
+    t.float    "starting_amount",  limit: 24
+    t.boolean  "is_active",                    default: true
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "taxes", force: :cascade do |t|
@@ -69,11 +91,38 @@ ActiveRecord::Schema.define(version: 20151119210304) do
   end
 
   create_table "unit_categories", force: :cascade do |t|
-    t.string   "name",            limit: 255
-    t.integer  "counterparty_id", limit: 4
-    t.boolean  "is_active",                   default: true
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.integer  "categories_group_id", limit: 4
+    t.string   "name",                limit: 255
+    t.integer  "counterparty_id",     limit: 4
+    t.integer  "tax_id",              limit: 4
+    t.boolean  "is_active",                       default: true
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "v_money_units_outs", id: false, force: :cascade do |t|
+    t.string "transaction_type", limit: 255
+    t.float  "amount",           limit: 24
+    t.date   "transaction_date"
+    t.string "alias",            limit: 255
   end
 
 end

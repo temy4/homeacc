@@ -165,3 +165,13 @@ $(document).on('ready page:load', function(){
      };
     $('#card_card_number').mask('AAAA AAAA AAAA ####');
 })
+
+function formatDate(date) {
+  var monthNames = [ 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря' ];
+
+  var day = date.getDate();
+  var monthIndex = date.getMonth();
+  var year = date.getFullYear();
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year;
+}

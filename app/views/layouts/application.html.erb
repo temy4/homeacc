@@ -4,8 +4,10 @@
   <title>Домашняя бухгалтерия</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+	
   <%= javascript_include_tag 'application' %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -17,7 +19,14 @@
 	  </a>
 	  <ul class="right hide-on-med-and-down">
 		<li><a href="/">ОБЗОР</a></li>
-		<li><a href="/">ДЕНЬГИ</a></li>
+		<li><a class="dropdown-button" data-activates="money-list">ДЕНЬГИ<i class="material-icons right">arrow_drop_down</i></a></li>
+		<ul id="money-list" class="dropdown-content">
+		  <li><%= link_to "Сводная таблица", :money_units %></li>
+		  <li><%= link_to "Прибыль", "/money_units/new/in" %></li>
+		  <li><%= link_to "Трата", "/money_units/new/out" %></li>
+		  <li><%= link_to "Отложенный платеж", :new_money_unit %></li>
+		</ul>
+		
 		<li><a class="dropdown-button" data-activates="report-list">ОТЧЕТЫ<i class="material-icons right">arrow_drop_down</i></a></li>
 		<ul id="report-list" class="dropdown-content">
 		  <li><a href="/">one</a></li>
@@ -32,6 +41,7 @@
 		  <li><%= link_to "Валюты", :currencies %></li>
 		  <li><%= link_to "Налоги", :taxes %></li>
 		  <li><%= link_to "Категории затрат", :unit_categories %></li>
+			<li><%= link_to "Группы категорий", :categories_groups %></li>
 		</ul>
 		<li><a href="/">ВЫХОД</a></li>
 	  </ul>
@@ -47,7 +57,9 @@
   </nav>
     <div class="row">
 	  <div class="col s12">
-        <%= yield %>
+	  	<p class="notice"><%= notice %></p>
+			<p class="alert"><%= alert %></p>
+			  <%= yield %>
       </div>
     </div>
 	<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -75,8 +87,8 @@
 </body>
 <script>
   $( document ).ready(function(){
-	$(".button-collapse").sideNav();
-	$(".dropdown-button").dropdown();
+		$(".button-collapse").sideNav();
+		$(".dropdown-button").dropdown();
   })
 </script>
 </html>

@@ -33,6 +33,8 @@ gem 'tzinfo-data'
 # gem 'capistrano-rails', group: :development
 gem 'jquery-turbolinks'
 
+gem 'devise'
+
 group :development, :test do
   # Call 'debugger' anywhere in the code to stop execution and get a debugger console
   # gem 'debugger'

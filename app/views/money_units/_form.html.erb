@@ -1,61 +1,188 @@
 <%= form_for(@money_unit) do |f| %>
   <% if @money_unit.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@money_unit.errors.count, "error") %> prohibited this money_unit from being saved:</h2>
-
-      <ul>
-      <% @money_unit.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+    <input type="hidden" id="notice" value="<%= @money_unit.errors.full_messages.first  %>" data-type="error" data-state="<%= @money_unit.errors[:state].first %>" data-rollback="<%= @money_unit.errors[:rollback].first %>" />
   <% end %>
+  <input type="hidden" name="money_unit[job_description]" id="money_unit_job_description" value="">
+  <div class="row">
+    <div class="input-field col s4">
+      <% if @action == 'show' %>
+        <%= f.text_field :id => 'money_unit_unit_category_id', :name => 'money_unit[unit_category_id]', :readonly => 'readonly', :value => (@money_unit.unit_category.nil? ? 'Не указан' : @money_unit.unit_category.name)  %>
+      <% else %> 
+        <%= f.collection_select(:unit_category_id, UnitCategory.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
+      <% end %>
+      <%= f.label "Категория", :class => (@action == 'show' ? 'active' : '') %>
+    </div>
+    <div class="input-field col s4">
+      <% if @action == 'show' %>
+        <%= f.text_field :id => 'money_unit_counterparty_id', :name => 'money_unit[counterparty_id]', :readonly => 'readonly', :value => (@money_unit.counterparty.nil? ? 'Не указан' : @money_unit.counterparty.counterparty_name)  %>
+      <% else %> 
+        <%= f.collection_select(:counterparty_id, Counterparty.where(:is_active => 1), :id, :counterparty_name, :include_blank => "Не указан") %>
+      <% end %>
+      <%= f.label "Контрагент", :class => (@action == 'show' ? 'active' : '') %>
+    </div>
+    <div class="input-field col s4">
+      <% if @action == 'show' %>
+        <%= f.text_field :id => 'money_unit_tax_id', :name => 'money_unit[tax_id]', :readonly => 'readonly', :value => (@money_unit.tax.nil? ? 'Не облагается' : @money_unit.tax.name)  %>
+      <% else %> 
+        <%= f.collection_select(:tax_id, Tax.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
+      <% end %>
+      <%= f.label "Налог", :class => (@action == 'show' ? 'active' : '') %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :counterparty_id %><br>
-    <%= f.number_field :counterparty_id %>
+  <div class="row">
+    <div class="input-field col s3">
+      <select id="money_unit_transaction_type" name="money_unit[transaction_type]">
+        <% if @operation == 'in' %>
+          <option value="in" selected>Приход</option>
+          <option value="out">Расход</option>
+        <% elsif @operation == 'out' %>
+          <option value="in">Приход</option>
+          <option value="out"selected>Расход</option>
+        <% end %>
+        <option value="other">Другое</option>
+      </select>
+      <label>Тип транзакции</label>
+    </div>
+    <div class="input-field col s2">
+      <input type="date" id="money_unit_transaction_date" name="money_unit[transaction_date]" class="datepicker">
+      <label for="money_unit_transaction_date">Дата</label>
+    </div>    
+    <div class="input-field col s7">
+      <input id="money_unit_name" name="money_unit[name]" type="text" class="validate">
+      <label for="money_unit_name">Описание</label>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :currency_id %><br>
-    <%= f.number_field :currency_id %>
+  <div class="row">
+    <div class="input-field col s3">
+      <input id="money_unit_starting_amount" name="money_unit[starting_amount]" type="text" class="validate">
+      <label for="money_unit_starting_amount">Сумма</label>
+    </div>
+    <!--<div class="input-field col s3">-->
+    <!--  <input id="money_unit_next_period_price" name="money_unit[next_period_price]" type="text" class="validate">-->
+    <!--  <label for="money_unit_next_period_price">Цена в следующем периоде</label>-->
+    <!--</div>-->
+    <div class="input-field col s3">
+      <% if @action == 'show' %>
+        <%= f.text_field :id => 'currency_id', :name => 'currency_id', :readonly => 'readonly', :value => (@money_unit.currency.nil? ? 'Не указан' : @money_unit.currency.name)  %>
+      <% else %> 
+        <%= f.collection_select(:currency_id, Currency.all, :id, :name, :include_blank => "Не указана", :selected => 1) %>
+      <% end %>
+      <%= f.label "Валюта", :class => (@action == 'show' ? 'active' : '') %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :tax_id %><br>
-    <%= f.number_field :tax_id %>
-  </div>
-  <div class="field">
-    <%= f.label :type %><br>
-    <%= f.text_field :type %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :period %><br>
-    <%= f.text_field :period %>
-  </div>
-  <div class="field">
-    <%= f.label :current_period_price %><br>
-    <%= f.number_field :current_period_price %>
-  </div>
-  <div class="field">
-    <%= f.label :next_period_price %><br>
-    <%= f.number_field :next_period_price %>
-  </div>
-  <div class="field">
-    <%= f.label :current_period %><br>
-    <%= f.date_select :current_period %>
-  </div>
-  <div class="field">
-    <%= f.label :next_period %><br>
-    <%= f.date_select :next_period %>
-  </div>
-  <div class="field">
-    <%= f.label :is_active %><br>
-    <%= f.check_box :is_active %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="row">
+    <div class="input-field col s3">
+    <% unless @action == 'show' %>
+      <div class="actions">
+        <%= link_to 'Отмена', unit_categories_url, :class => "waves-effect waves-light btn red accent-1" %>
+        <button class="btn waves-effect waves-light" type="submit" name="money_unit[commit]">Сохранить</button>
+      </div>
+    <% end %>
+    </div>
   </div>
 <% end %>
+
+<script>
+var a = ''
+function getScheduleData(){
+  var string = '';
+  $('.repeat.active').find('input.valuefield,select.valuefield').each(function( index ) {
+    if ($(this).prop('type').toLowerCase() == 'radio'){
+      string += '|' + 'checked:' + $(this).prop('checked')
+    }
+    else{
+      string += '|' + $(this).val()
+    }
+  });
+  
+  return string
+}
+$( document ).ready(function(){
+    var date_from_input = $( '#money_unit_transaction_date' ).pickadate({
+    monthsFull: [ 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря' ],
+    monthsShort: [ 'янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек' ],
+    weekdaysFull: [ 'воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота' ],
+    weekdaysShort: [ 'вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб' ],
+    today: 'сегодня',
+    clear: 'удалить',
+    close: 'закрыть',
+    firstDay: 1,
+    format: 'd mmmm yyyy г.',
+    formatSubmit: 'yyyy-mm-dd',
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15, // Creates a dropdown of 15 years to control year
+    max: new Date(),
+    hiddenSuffix: '',
+    hiddenName: 'money_unit[transaction_date]',
+    onStart: function() {
+      var date = new Date()
+      this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
+    }
+  }), picker_date_from_input = date_from_input.pickadate( 'picker' );
+  
+  $('#money_unit_unit_category_id').on('change', function(){
+    var cid = $(this).val()
+    $.ajax({
+      url: "/unit_categories/getinfo/" + cid,
+      method: "GET",
+      dataType: "json",
+      success: function (response){
+        if(response[0] != null){
+          $('#money_unit_counterparty_id').val(response[0].id)
+        }
+        else{
+          $('#money_unit_counterparty_id').val("")
+        }
+        
+        if(response[1] != null){
+          $('#money_unit_tax_id').val(response[1].id)
+        }
+        else{
+          $('#money_unit_tax_id').val("")
+        }
+        
+        $('#money_unit_counterparty_id, #money_unit_tax_id').material_select('destroy');
+        $('#money_unit_counterparty_id, #money_unit_tax_id').material_select();
+      }
+    });
+  });
+  
+})
+
+$('#money_unit_period').on('change', function(){
+  $('.repeat').addClass('hide');
+  $('.repeat').removeClass('active');
+  var info_ref = null;
+  
+  switch ( $(this).val() ){
+    case 'd':
+      $('#rep_d').removeClass('hide');
+      $('#rep_d').addClass('active');
+      break;
+      
+    case 'w':
+      $('#rep_w').removeClass('hide');
+      $('#rep_w').addClass('active');
+      break;
+      
+    case 'm':
+      $('#rep_m').removeClass('hide');
+      $('#rep_m').addClass('active');
+      break;
+      
+    case 'y':
+      $('#rep_y').removeClass('hide');
+      $('#rep_y').addClass('active');
+      break;
+  }
+  
+  // $('form').on('submit', function(event){
+  //   event.preventDefault();
+  //   var job = $('#money_unit_period').val() + getScheduleData();
+  //   $('#money_unit_job_description').val(job);
+  //   alert(job)
+  //   //$(this).submit();
+  // })
+})
+</script>

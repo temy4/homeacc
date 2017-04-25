@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount: 
+  transaction_date: 
+  alias: MyString
+
+two:
+  amount: 
+  transaction_date: 
+  alias: MyString

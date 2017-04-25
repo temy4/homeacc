@@ -1,0 +1,47 @@
+<%= form_for(@categories_group) do |f| %>
+  <% if @categories_group.errors.any? %>
+    <input type="hidden" id="notice" value="<%= @categories_group.errors.full_messages.first  %>" data-type="error" data-state="<%= @categories_group.errors[:state].first %>" data-rollback="<%= @categories_group.errors[:rollback].first %>" />
+  <% end %>
+
+
+  <div class="row">
+    <div class="input-field col s6">
+      <% if @action == 'show' %>
+        <%= f.text_field :alias, :readonly => 'readonly' %>
+      <% else %>
+        <%= f.text_field :alias %>
+      <% end %>
+      <% if @action == 'new' %>
+        <%= f.label "Группа категорий" %>
+      <% else %>
+        <%= f.label "Группа категорий", :class => "active" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12 m6">
+    <% if @action == 'show' %>
+    
+      <%
+      @cats = @categories_group.unit_categories.pluck(:name)
+      %>
+      <%= f.text_field :unit_categories, :value => @cats.join(', '), :readonly => 'readonly' %>
+    <% else %>
+      <% if @action == 'new' %>
+        <%= f.select :unit_categories, UnitCategory.where(:is_active => 1).collect {|c| [ c.name, c.id ] }, { :selected => :unit_categories }, { :multiple => "true" } %>
+      <% else %>
+        <select multiple="multiple" name="categories_group[unit_categories][]" id="categories_group_unit_categories" class="initialized">
+          <%= options_for_select(UnitCategory.where(:is_active => 1).pluck(:name, :id), @categories_group.unit_categories.pluck(:id)) %>
+        </select>
+      <% end %>
+    <% end %>
+      <label>Список категорий</label>
+    </div>
+  </div>
+  <% unless @action == 'show' %>
+    <div class="actions">
+      <%= link_to 'Отмена', categories_groups_path, :class => "waves-effect waves-light btn red accent-1" %>
+      <button class="btn waves-effect waves-light" type="submit" name="commit">Сохранить</button>
+    </div>
+  <% end %>
+<% end %>

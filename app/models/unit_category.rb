@@ -4,6 +4,8 @@ class UnitCategory < ActiveRecord::Base
 	validate :check_existed
 
 	belongs_to :counterparty
+	belongs_to :tax
+	has_and_belongs_to_many :categories_groups
 
 	def is_deleted?
 		is_active == 0

@@ -52,6 +52,17 @@
     <% end %>
   </div>
   
+  <div class="row">
+    <div id="tax_select" class="input-field col s6">
+      <% if @action == 'show' %>
+        <%= f.text_field :id, :readonly => 'readonly', :value => (@unit_category.tax.nil? ? 'Не указан' : @unit_category.tax.name)  %>
+      <% else %> 
+        <%= f.collection_select(:tax_id, Tax.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
+      <% end %>
+      <%= f.label "Налог", :class => (@action == 'show' ? 'active' : '') %>
+    </div>
+  </div>
+  
   <% unless @action == 'show' %>
     <div class="actions">
       <%= link_to 'Отмена', unit_categories_url, :class => "waves-effect waves-light btn red accent-1" %>

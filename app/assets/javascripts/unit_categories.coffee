@@ -13,7 +13,7 @@ refreshCPList = ->
   $.ajax(
     method: 'POST'
     dataType: 'json'
-    url: '<%= counterparties_url %>'
+    url: '/counterparties/'
     data: 'counterparty[counterparty_name]': $('#counterparty_counterparty_name').val()).done((msg) ->
     $.ajax(
       method: 'GET'

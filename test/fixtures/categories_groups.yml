@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unit_category_id: 1
+  alias: MyString
+  is_active: false
+
+two:
+  unit_category_id: 1
+  alias: MyString
+  is_active: false
