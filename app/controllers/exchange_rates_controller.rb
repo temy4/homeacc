@@ -1,4 +1,5 @@
 class ExchangeRatesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_exchange_rate, only: [:show, :edit, :update, :destroy]
 
   # GET /exchange_rates

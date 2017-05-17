@@ -1,5 +1,6 @@
 # encoding: utf-8
 class CardsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_card, only: [:show, :edit, :update, :destroy, :recover]
 
   # GET /cards

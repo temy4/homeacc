@@ -1,5 +1,6 @@
 # encoding: utf-8
 class CounterpartiesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_counterparty, only: [:show, :edit, :update, :destroy, :recover]
 
   # GET /counterparties

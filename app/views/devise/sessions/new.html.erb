@@ -1,25 +1,28 @@
-<h2>Log in</h2>
+<h3>Авторизация</h3>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+  <div class="row">
+    <div class="input-field col s4">
+      <%= f.email_field :email, autofocus: true %>
+      <%= f.label :email %>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
+  <div class="row">
+    <div class="input-field col s4">
     <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
+    <%= f.label :password %>
+    </div>
+    <% if devise_mapping.rememberable? -%>
+      <div class="input-field col s4">
       <%= f.check_box :remember_me %>
       <%= f.label :remember_me %>
+      </div>
+    <% end -%>
+  </div>
+  <div class="row">
+    <div class="input-field col s4">
+    <%= f.submit "ВОЙТИ", class: "btn waves-effect waves-light" %>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
 <% end %>
 

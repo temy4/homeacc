@@ -1,4 +1,5 @@
 class TaxesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_tax, only: [:show, :edit, :update, :destroy, :recover]
 
   # GET /taxes

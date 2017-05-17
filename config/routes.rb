@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  #devise_for :users
   get 'persons/profile'
 
   resources :categories_groups
@@ -67,13 +67,16 @@ Rails.application.routes.draw do
       post 'destroy_multiple'
     end
   end
-
+  
+  devise_for :users, controllers: { sessions: "users/sessions" }
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
-  get 'persons/profile', as: 'user_root'
+  #get 'persons/profile', as: 'user_root'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

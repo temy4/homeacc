@@ -1,4 +1,5 @@
 class CategoriesGroupsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_categories_group, only: [:show, :edit, :update, :destroy, :recover]
   before_action :set_categories, only: [:update]
   before_action :delete_empty_categories, only: [:create, :update]

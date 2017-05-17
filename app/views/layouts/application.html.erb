@@ -17,7 +17,9 @@
 	  <a href="#" class="brand-logo">
 		<a id="logo-container" href="/" class="brand-logo"><img src="/images/homeacc_logo_white.png" class="responsive-img" /></a>
 	  </a>
+	  
 	  <ul class="right hide-on-med-and-down">
+	  	<% if user_signed_in? %>
 		<li><a href="/">ОБЗОР</a></li>
 		<li><a class="dropdown-button" data-activates="money-list">ДЕНЬГИ<i class="material-icons right">arrow_drop_down</i></a></li>
 		<ul id="money-list" class="dropdown-content">
@@ -43,7 +45,14 @@
 		  <li><%= link_to "Категории затрат", :unit_categories %></li>
 			<li><%= link_to "Группы категорий", :categories_groups %></li>
 		</ul>
-		<li><a href="/">ВЫХОД</a></li>
+		<% end %>	
+		<li>
+			<% if user_signed_in? %>
+			    <%= link_to 'ВЫЙТИ', destroy_user_session_path, :method => :delete %>
+			<% else %>
+			    <%= link_to 'ВОЙТИ', new_user_session_path %>
+			<% end %>	
+		</li>
 	  </ul>
 	  <ul id="slide-out" class="side-nav">
 		<li><a href="/">Обзор</a></li>

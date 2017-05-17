@@ -1,5 +1,6 @@
 # encoding: utf-8
 class UnitCategoriesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_unit_category, only: [:show, :edit, :update, :destroy, :recover]
 
   # GET /unit_categories

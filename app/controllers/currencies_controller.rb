@@ -1,5 +1,6 @@
 # encoding: utf-8
 class CurrenciesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_currency, only: [:show, :edit, :update, :destroy]
 
   # GET /currencies
