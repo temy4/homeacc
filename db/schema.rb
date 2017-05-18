@@ -118,11 +118,4 @@ ActiveRecord::Schema.define(version: 20170420175423) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  create_table "v_money_units_outs", id: false, force: :cascade do |t|
-    t.string "transaction_type", limit: 255
-    t.float  "amount",           limit: 24
-    t.date   "transaction_date"
-    t.string "alias",            limit: 255
-  end
-
 end

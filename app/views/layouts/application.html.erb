@@ -2,12 +2,11 @@
 <html>
 <head>
   <title>Домашняя бухгалтерия</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
-	
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => false %>
+	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">-->
+
   <%= javascript_include_tag 'application' %>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>-->
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -17,7 +16,7 @@
 	  <a href="#" class="brand-logo">
 		<a id="logo-container" href="/" class="brand-logo"><img src="/images/homeacc_logo_white.png" class="responsive-img" /></a>
 	  </a>
-	  
+
 	  <ul class="right hide-on-med-and-down">
 	  	<% if user_signed_in? %>
 		<li><a href="/">ОБЗОР</a></li>
@@ -28,7 +27,7 @@
 		  <li><%= link_to "Трата", "/money_units/new/out" %></li>
 		  <li><%= link_to "Отложенный платеж", :new_money_unit %></li>
 		</ul>
-		
+
 		<li><a class="dropdown-button" data-activates="report-list">ОТЧЕТЫ<i class="material-icons right">arrow_drop_down</i></a></li>
 		<ul id="report-list" class="dropdown-content">
 		  <li><a href="/">one</a></li>
@@ -45,13 +44,13 @@
 		  <li><%= link_to "Категории затрат", :unit_categories %></li>
 			<li><%= link_to "Группы категорий", :categories_groups %></li>
 		</ul>
-		<% end %>	
+		<% end %>
 		<li>
 			<% if user_signed_in? %>
 			    <%= link_to 'ВЫЙТИ', destroy_user_session_path, :method => :delete %>
 			<% else %>
 			    <%= link_to 'ВОЙТИ', new_user_session_path %>
-			<% end %>	
+			<% end %>
 		</li>
 	  </ul>
 	  <ul id="slide-out" class="side-nav">
