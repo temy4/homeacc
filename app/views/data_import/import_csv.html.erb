@@ -1,0 +1,177 @@
+<% unless notice.nil? %>
+  <input type="hidden" id="notice" value="<%= notice %>" data-type="<%= flash[:type] %>" data-state="<%= flash[:state] %>" data-rollback="<%= flash[:rollback_url] %>" />
+<% end %>
+<h3 class="header">Импортировать выписку</h3>
+
+<div class="row">
+  <div class="col s12">
+  <%= form_for @data_import, :html => { :multipart => true, :id => "importForm" }, :remote => true do |f| %>
+  <div class="file-field input-field">
+    <div class="btn">
+      <span>Открыть...</span>
+      <%= f.file_field :file, :id => 'uploadField' %>
+    </div>
+    <div class="file-path-wrapper">
+      <input class="file-path validate" type="text">
+    </div>
+  </div>
+  <% end %>
+    <div id="progressBar" class="progress hide">
+        <div class="indeterminate"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s12">
+    <h5 id="total"></h5>
+  </div>
+</div>
+<div class="row">
+  <div class="col s12">
+    <ul id="parsingResult" class="collapsible hide" data-collapsible="expandable">
+          <!--<li>
+            <div class="collapsible-header"><i class="material-icons green-text">add_circle</i>First</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons green-text">add_circle</i>Second</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons red-text">remove_circle</i>Third</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>-->
+    </div>
+</div>
+
+<script>
+var currency_symbols = {
+    'RUB': '₽', // Russian Ruble
+    'USD': '$', // US Dollar
+    'EUR': '€', // Euro
+    'CRC': '₡', // Costa Rican Colón
+    'GBP': '£', // British Pound Sterling
+    'ILS': '₪', // Israeli New Sheqel
+    'INR': '₹', // Indian Rupee
+    'JPY': '¥', // Japanese Yen
+    'KRW': '₩', // South Korean Won
+    'NGN': '₦', // Nigerian Naira
+    'PHP': '₱', // Philippine Peso
+    'PLN': 'zł', // Polish Zloty
+    'PYG': '₲', // Paraguayan Guarani
+    'THB': '฿', // Thai Baht
+    'UAH': '₴', // Ukrainian Hryvnia
+    'VND': '₫', // Vietnamese Dong
+}
+$( document ).ready(function(){
+  total_costs = {};
+  $('#uploadField').on('change', function(){
+    $('#importForm').hide();
+    $('#progressBar').removeClass('hide');
+    files = $('#uploadField')[0].files;
+    reader = new FileReader();
+    file = files[0];
+    var form;
+    form = new FormData;
+    form.append('file', file);
+    $.ajax({
+      type: 'POST',
+      url: '/data_import/upload',
+      contentType: 'json',
+      data: form,
+      processData: false,
+      contentType: false,
+      success: function(result) {
+        if(result.state == 200){
+          var resultRoot =  $('#parsingResult')
+          $.each(result.data, function( index, row ) {
+            if(index > 0){ // remove table header
+              if(row.length == 1){ // let's do application a bit intellectual: in case of only one row try to split it using other semicolons
+                row = row[0].split(';');
+              }
+
+              var price = parseFloat(row[3].replace(/\s/, ''));
+              var currency = currency_symbols[row[2]];
+              var good = row[1];
+              var time = row[0];
+
+              var icon = 'report';
+              var color = 'orange';
+
+              if(price > 0){
+                icon = 'add_circle'
+                color = 'green'
+              }
+              else{
+                icon = 'remove_circle'
+                color = 'red'
+              }
+              if (typeof total_costs[row[2]] == 'undefined'){
+                total_costs[row[2]] = 0;
+              }
+              total_costs[row[2]] = parseFloat(total_costs[row[2]]) + price
+
+              resultRoot.append(
+              '<li id="IMP_' + row[2] + index + '" class="active scale-transition">' +
+                '<div class="collapsible-header active">' +
+                  '<i class="material-icons ' + color + '-text">' + icon + '_circle</i><strong>' + price + currency +
+                  '</strong>&nbsp;' + good +
+                '</div>' +
+                '<div class="collapsible-body" style="display: block;">' +
+                  '<div class="row">' +
+                    '<span>Дата: <i>' + time + '</i></span>' +
+                  '</div>' +
+                  '<a class="btn green"><i class="material-icons white-text">done</i></a> ' +
+                  '<a class="btn orange"><i class="material-icons white-text">mode_edit</i></a> ' +
+                  '<a data-container-id="#IMP_' + row[2] + index + '" class="del-btn btn red"><i class="material-icons white-text">delete</i></a>' +
+                '</div>' +
+              '</li>')
+            }
+          });
+        }
+        else{
+          Materialize.toast(result.message, 4000)
+        }
+        $('#progressBar').addClass('hide');
+        $('#importForm').show();
+        var res = displayArray(total_costs, ', ', ': ');
+        $('#total').text(res);
+        $('#parsingResult').removeClass('hide');
+
+        $('.del-btn').click(function (){
+          var container = $(this).data('container-id');
+          $(container).addClass('scale-out');
+          setTimeout(function() { $(container).remove() }, 300);
+          $('#parsingResult').collapsible('destroy');
+          $('#parsingResult').collapsible();
+          if ($('#parsingResult').children().length <= 1){
+            $('#parsingResult').addClass('hide');
+            $('#total').text('');
+          }
+        })
+      },
+      error: function() {
+        $('#progressBar').addClass('hide');
+        $('#importForm').show();
+      }
+    });
+  });
+});
+
+
+function displayArray(array, semicolon, equal_sign){
+	var result = '';
+  var i = 0;
+
+  $.each(array, function( key, value ) {
+    num = Number(value)
+    result += key + equal_sign + num.toFixed(2)
+    if ( i < $(array).length ){
+      result += semicolon;
+    }
+  	i++
+  });
+
+  return result;
+}
+</script>

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'data_import/import_csv'
+  post 'data_import/upload'
+
   #devise_for :users
   get 'persons/profile'
 
@@ -9,7 +12,7 @@ Rails.application.routes.draw do
   resources :taxes
   resources :exchange_rates
   resources :counterparties
-  
+
   # custom routes
   # GET routes
   get 'welcome/index'
@@ -18,10 +21,10 @@ Rails.application.routes.draw do
   get 'taxes/:id/recover' => 'taxes#recover'
   get 'unit_categories/:id/recover' => 'unit_categories#recover'
   get 'categories_groups/:id/recover' => 'categories_groups#recover'
-  
+
   get 'currencies' => 'currencies#index'
   get 'currencies/update_all' => 'currencies#update_all'
-  
+
   get 'money_units/new/in' => 'money_units#money_in'
   get 'money_units/new/out' => 'money_units#money_out'
   get 'money_units/get/:date_from/:date_to' => 'money_units#get_cf_data'
@@ -58,7 +61,7 @@ Rails.application.routes.draw do
   resources :money_units do
     collection do
       post 'destroy_multiple'
-      
+
     end
   end
 
@@ -67,16 +70,16 @@ Rails.application.routes.draw do
       post 'destroy_multiple'
     end
   end
-  
+
   devise_for :users, controllers: { sessions: "users/sessions" }
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   #get 'persons/profile', as: 'user_root'
-  
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
