@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170420175423) do
+ActiveRecord::Schema.define(version: 20170522132326) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(version: 20170420175423) do
 
   add_index "categories_groups_unit_categories", ["categories_group_id"], name: "index_categories_groups_unit_categories_on_categories_group_id", using: :btree
   add_index "categories_groups_unit_categories", ["unit_category_id"], name: "index_categories_groups_unit_categories_on_unit_category_id", using: :btree
+
+  create_table "category_mappings", force: :cascade do |t|
+    t.integer  "unit_category_id", limit: 4
+    t.string   "name_pattern",     limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "counterparties", force: :cascade do |t|
     t.string   "counterparty_name", limit: 255
@@ -117,5 +124,12 @@ ActiveRecord::Schema.define(version: 20170420175423) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "v_money_units_outs", id: false, force: :cascade do |t|
+    t.string "transaction_type", limit: 255
+    t.float  "amount",           limit: 24
+    t.date   "transaction_date"
+    t.string "alias",            limit: 255
+  end
 
 end
