@@ -4,21 +4,35 @@
 <h3 class="header">Налоги</h3>
 
 <div class="row">
-  <div class="input-field col s6">
+  <div class="input-field col m6 s12">
     <input id="search_field" type="text">
     <label for="search_field">Поиск</label>
   </div>
 </div>
 <%= form_tag destroy_multiple_taxes_path, method: :post, :id => 'items-list' do %>
-<div class="row">
-  <div class="col s12">
-    <a class="waves-effect waves-light btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
-    <%= link_to new_tax_path, :class => "waves-effect waves-light btn" do %>
+
+<div class="row hide-on-small-only">
+  <div class="col m6 s12">
+    <a class="btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
+    <%= link_to new_tax_path, :class => "btn" do %>
       <i class="material-icons left">add</i>Добавить</a>
     <% end %>
 
-    <button id="btd_delete" class="waves-effect waves-light btn red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранные налоги?" rel="nofollow" data-method="delete">
+    <button id="btd_delete" class="btn red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранные налоги?" rel="nofollow" data-method="delete">
       <i class="material-icons left">delete</i>Удалить
+    </button>
+  </div>
+</div>
+
+<div class="row hide-on-med-and-up">
+  <div class="col m6 s12">
+    <a class="btn-floating" id="btn_select_all_small"><i class="material-icons left" id="cb_chk_all_icon_small">check_box_outline_blank</i></a>
+    <%= link_to new_tax_path, :class => "btn-floating" do %>
+      <i class="material-icons left">add</i></a>
+    <% end %>
+
+    <button id="btd_delete_small" class="btn-floating red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранные налоги?" rel="nofollow" data-method="delete">
+      <i class="material-icons left">delete</i>
     </button>
   </div>
 </div>
@@ -30,10 +44,10 @@
         <tr>
           <th>Налог</th>
           <th>Процент</th>
-          <th>Описание</th>
+          <th class="hide-on-small-only">Описание</th>
         </tr>
       </thead>
-    
+
       <tbody>
         <% @taxes.each do |tax| %>
           <tr class="content-label">
@@ -44,19 +58,20 @@
             <td>
               <label for="tax-<%= tax.id %>"><%= tax.percent %>%</label>
             </td>
-            <td>
+            <td class="hide-on-small-only">
               <label for="tax-<%= tax.id %>"><%= tax.desc %></label>
             </td>
             <td>
-              <%= link_to tax, :class => "btn-floating btn cyan lighten-3" do %>
-                <i class="material-icons">launch</i>
-              <% end %>
-              <%= link_to edit_tax_path(tax), :class => "btn-floating btn teal lighten-3" do %>
-                <i class="material-icons">edit</i>
-              <% end %>
-              <%= link_to tax, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить налог "' + tax.name + '"?' } do %>
-                <i class="material-icons">delete</i>
-              <% end %>
+              <div class="hide-on-small-only">
+                <%= link_to tax, :class => "btn-floating btn cyan lighten-3" do %><i class="material-icons">launch</i><% end %>
+                <%= link_to edit_tax_path(tax), :class => "btn-floating btn teal lighten-3" do %><i class="material-icons">edit</i><% end %>
+                <%= link_to tax, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить налог "' + tax.name + '"?' } do %><i class="material-icons">delete</i><% end %>
+              </div>
+              <div class="hide-on-med-and-up">
+                <%= link_to tax, :class => "btn cyan lighten-3" do %><i class="material-icons">launch</i><% end %><br /><br />
+                <%= link_to edit_tax_path(tax), :class => "btn teal lighten-3" do %><i class="material-icons">edit</i><% end %><br /><br />
+                <%= link_to tax, :class => "btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить налог "' + tax.name + '"?' } do %><i class="material-icons">delete</i><% end %>
+              </div>
             </td>
           </tr>
         <% end %>
@@ -66,9 +81,8 @@
   </div>
 </div>
 <script type="text/javascript">
-
 $( document ).ready(function(){
-  $('#btn_select_all').on('click', function(){
+  $('#btn_select_all, #btn_select_all_small').on('click', function(){
     $(".list-chk:not(.visible)").prop('checked', false);
     $(".list-chk.visible").prop('checked', !($('.list-chk.visible:checked').size() == $(".list-chk.visible").size()) );
     check_any_selected();
@@ -83,22 +97,24 @@ $( document ).ready(function(){
   function check_all_selected(){
     if( $('.list-chk.visible:checked').size() == $(".list-chk.visible").size() && $(".list-chk.visible").size() > 0 ){
       $('#cb_chk_all_icon').text('check_box');
+      $('#cb_chk_all_icon_small').text('check_box');
       $('#cb_chk_all_text').text('Снять выделение');
       return true;
     }
     else{
       $('#cb_chk_all_icon').text('check_box_outline_blank');
+      $('#cb_chk_all_icon_small').text('check_box_outline_blank');
       $('#cb_chk_all_text').text('Выделить все');
       return false;
     }
   }
   function check_any_selected(){
     if ($('.list-chk.visible:checked').size() > 0 ){
-      $('#btd_delete').removeClass('disabled');
+      $('#btd_delete, #btd_delete_small').removeClass('disabled');
       return true;
     }
     else{
-      $('#btd_delete').addClass('disabled');
+      $('#btd_delete, #btd_delete_small').addClass('disabled');
       return false;
     }
   }
