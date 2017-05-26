@@ -52,8 +52,8 @@
 	  <ul id="slide-out" class="side-nav">
       <% if user_signed_in? %>
 		<li><a href="/">ОБЗОР</a></li>
-		<li><a class="dropdown-button" data-activates="money-list">ДЕНЬГИ И ОТЧЕТЫ<i class="material-icons right">arrow_drop_down</i></a></li>
-		<ul id="money-list" class="dropdown-content">
+		<li><a class="dropdown-button" data-activates="money-list-small">ДЕНЬГИ И ОТЧЕТЫ<i class="material-icons right">arrow_drop_down</i></a></li>
+		<ul id="money-list-small" class="dropdown-content">
 		  <li><%= link_to "Сводная таблица", :money_units %></li>
 		  <li><%= link_to "Прибыль", "/money_units/new/in" %></li>
 		  <li><%= link_to "Трата", "/money_units/new/out" %></li>
@@ -62,8 +62,8 @@
       <li><%= link_to "Импорт данных", :data_import_import_csv %></li>
 		</ul>
 
-		<li><a class="dropdown-button" data-activates="dict-list">СПРАВОЧНИКИ<i class="material-icons right">arrow_drop_down</i></a></li>
-		<ul id="dict-list" class="dropdown-content">
+		<li><a class="dropdown-button" data-activates="dict-list-small">СПРАВОЧНИКИ<i class="material-icons right">arrow_drop_down</i></a></li>
+		<ul id="dict-list-small" class="dropdown-content">
 		  <li><%= link_to "Контрагенты", :counterparties %></li>
 		  <li><%= link_to "Карты", :cards %></li>
 		  <li><%= link_to "Валюты", :currencies %></li>
