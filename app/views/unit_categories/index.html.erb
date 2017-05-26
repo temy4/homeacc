@@ -11,7 +11,7 @@
 </div>
 <%= form_tag destroy_multiple_unit_categories_path, method: :post, :id => 'items-list' do %>
 
-<div class="row hide-on-small-only">
+<div class="row hide-on-med-and-down">
   <div class="col m6 s12">
     <a class="btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
     <%= link_to new_unit_category_path, :class => "btn" do %>
@@ -24,7 +24,7 @@
   </div>
 </div>
 
-<div class="row hide-on-med-and-up">
+<div class="row hide-on-large-only">
   <div class="col m6 s12">
     <a class="btn-floating" id="btn_select_all_small"><i class="material-icons left" id="cb_chk_all_icon_small">check_box_outline_blank</i></a>
     <%= link_to new_unit_category_path, :class => "btn-floating" do %>
