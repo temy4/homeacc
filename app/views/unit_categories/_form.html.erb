@@ -5,7 +5,7 @@
 
 
   <div class="row">
-    <div class="input-field col s6">
+    <div class="input-field col m6 s12">
       <% if @action == 'show' %>
         <%= f.text_field :name, :readonly => 'readonly' %>
       <% else %>
@@ -21,10 +21,10 @@
   </div>
 
   <div class="row">
-    <div id="counterparty_select" class="input-field col s6">
+    <div id="counterparty_select" class="input-field col m6 s10">
       <% if @action == 'show' %>
         <%= f.text_field :id, :readonly => 'readonly', :value => (@unit_category.counterparty.nil? ? 'Не указан' : @unit_category.counterparty.counterparty_name)  %>
-      <% else %> 
+      <% else %>
         <%= f.collection_select(:counterparty_id, Counterparty.where(:is_active => 1), :id, :counterparty_name, :include_blank => "Не указан") %>
       <% end %>
       <%= f.label "Контрагент", :class => (@action == 'show' ? 'active' : '') %>
@@ -38,10 +38,10 @@
         <div class="modal-content">
           <h4>Добавить контрагента</h4>
           <div class="row">
-            <div class="input-field col s6">
+            <div class="input-field col m6 s12">
               <%= text_field(:counterparty, :counterparty_name, :placeholder => 'Контрагент') %>
             </div>
-          </div>          
+          </div>
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">ОТМЕНА</a>
@@ -51,18 +51,18 @@
 
     <% end %>
   </div>
-  
+
   <div class="row">
-    <div id="tax_select" class="input-field col s6">
+    <div id="tax_select" class="input-field col m6 s12">
       <% if @action == 'show' %>
         <%= f.text_field :id, :readonly => 'readonly', :value => (@unit_category.tax.nil? ? 'Не указан' : @unit_category.tax.name)  %>
-      <% else %> 
+      <% else %>
         <%= f.collection_select(:tax_id, Tax.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
       <% end %>
       <%= f.label "Налог", :class => (@action == 'show' ? 'active' : '') %>
     </div>
   </div>
-  
+
   <% unless @action == 'show' %>
     <div class="actions">
       <%= link_to 'Отмена', unit_categories_url, :class => "waves-effect waves-light btn red accent-1" %>

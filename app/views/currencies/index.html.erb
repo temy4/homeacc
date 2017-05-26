@@ -11,30 +11,30 @@
 </blockquote>
 <% unless Currency.all.nil?  %>
 <div class="row">
-  <div class="input-field col s6">
+  <div class="input-field col m6 s12">
     <input id="search_field" type="text">
     <label for="search_field">Поиск</label>
   </div>
 </div>
 
 <div class="row">
-  <div class="input-field col s1">
+  <div class="input-field col s3">
     <input id="from_currency_count" value="1.00" type="text">
     <label for="from_currency_count" id="from_curr_lbl" class="active">Количество</label>
   </div>
-  <div class="input-field col s2">
+  <div class="input-field col s9">
     <select id="from_currency">
       <% Currency.all.each do |c| %>
         <option value="<%= c.rate %>" data-count="<%= c.currency_count %>" data-ref="<%= c.cbr_num %>"><%= c.name %></option>
       <% end %>
     <select>
   </div>
-  
-  <div class="input-field col s1">
+
+  <div class="input-field col s3">
     <input id="to_currency_count" value="1.00" type="text" readonly>
     <label for="to_currency_count" id="to_curr_lbl" class="active">Количество</label>
   </div>
-  <div class="input-field col s2">
+  <div class="input-field col s9">
     <select id="to_currency">
       <% Currency.all.each do |c| %>
         <option value="<%= c.rate %>" data-count="<%= c.currency_count %>" data-ref="<%= c.cbr_num %>"><%= c.name %></option>
@@ -118,7 +118,7 @@ $( document ).ready(function(){
       rur_for_from = from_rate / from_count
       rur_for_to = to_rate / to_count
       rate = rur_for_from / rur_for_to
-      
+
       num = rate * convert_from_val
 
       $('#to_currency_count').val(num.toFixed(2));
