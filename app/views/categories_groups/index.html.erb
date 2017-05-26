@@ -4,35 +4,21 @@
 <h3 class="header">Группы категорий</h3>
 
 <div class="row">
-  <div class="input-field col m6 s12">
+  <div class="input-field col s6">
     <input id="search_field" type="text">
     <label for="search_field">Поиск</label>
   </div>
 </div>
 <%= form_tag destroy_multiple_categories_groups_path, method: :post, :id => 'items-list' do %>
-
-<div class="row hide-on-small-only">
-  <div class="col m6 s12">
-    <a class="btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
-    <%= link_to new_categories_group_path, :class => "btn" do %>
+<div class="row">
+  <div class="col s12">
+    <a class="waves-effect waves-light btn" id="btn_select_all"><i class="material-icons left" id="cb_chk_all_icon">check_box_outline_blank</i><span id="cb_chk_all_text">Выбрать все</span></a>
+    <%= link_to new_categories_group_path, :class => "waves-effect waves-light btn" do %>
       <i class="material-icons left">add</i>Добавить</a>
     <% end %>
 
-    <button id="btd_delete" class="btn red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранные группы?" rel="nofollow" data-method="delete">
+    <button id="btd_delete" class="waves-effect waves-light btn red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранных контрагентов?" rel="nofollow" data-method="delete">
       <i class="material-icons left">delete</i>Удалить
-    </button>
-  </div>
-</div>
-
-<div class="row hide-on-med-and-up">
-  <div class="col m6 s12">
-    <a class="btn-floating" id="btn_select_all_small"><i class="material-icons left" id="cb_chk_all_icon_small">check_box_outline_blank</i></a>
-    <%= link_to new_categories_group_path, :class => "btn-floating" do %>
-      <i class="material-icons left">add</i></a>
-    <% end %>
-
-    <button id="btd_delete_small" class="btn-floating red lighten-3 disabled" name="commit" type="submit" data-confirm="Вы уверены, что хотите удалить выбранные группы?" rel="nofollow" data-method="delete">
-      <i class="material-icons left">delete</i>
     </button>
   </div>
 </div>
@@ -43,11 +29,11 @@
       <thead>
         <tr>
           <th>Группа</th>
-          <th class="hide-on-small-only">Категории</th>
+          <th>Категории</th>
           <th colspan="3"></th>
         </tr>
       </thead>
-
+    
       <tbody>
         <% @categories_groups.each do |categories_group| %>
           <tr class="content-label">
@@ -56,20 +42,19 @@
               <input type="checkbox" class="list-chk visible filled-in" name="categories_groups[]" value="<%= categories_group.id %>" id="categories_group-<%= categories_group.id %>" />
               <label for="categories_group-<%= categories_group.id %>"><%= categories_group.alias %></label>
             </td>
-            <td class="hide-on-small-only">
+            <td>
               <%= @uc.join(", ") %>
             </td>
             <td>
-              <div class="hide-on-small-only">
-                <%= link_to categories_group, :class => "btn-floating btn cyan lighten-3" do %><i class="material-icons">launch</i><% end %>
-                <%= link_to edit_categories_group_path(categories_group), :class => "btn-floating btn teal lighten-3" do %><i class="material-icons">edit</i><% end %>
-                <%= link_to categories_group, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить группу "' + categories_group.alias + '"?' } do %><i class="material-icons">delete</i><% end %>
-              </div>
-              <div class="hide-on-med-and-up">
-                <%= link_to categories_group, :class => "btn cyan lighten-3" do %><i class="material-icons">launch</i><% end %><br /><br />
-                <%= link_to edit_categories_group_path(categories_group), :class => "btn teal lighten-3" do %><i class="material-icons">edit</i><% end %><br /><br />
-                <%= link_to categories_group, :class => "btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить группу "' + categories_group.alias + '"?' } do %><i class="material-icons">delete</i><% end %>
-              </div>
+              <%= link_to categories_group, :class => "btn-floating btn cyan lighten-3" do %>
+                <i class="material-icons">launch</i>
+              <% end %>
+              <%= link_to edit_categories_group_path(categories_group), :class => "btn-floating btn teal lighten-3" do %>
+                <i class="material-icons">edit</i>
+              <% end %>
+              <%= link_to categories_group, :class => "btn-floating btn red lighten-3", method: :delete, data: { confirm: 'Вы уверены, что хотите удалить контрагента "' + categories_group.alias + '"?' } do %>
+                <i class="material-icons">delete</i>
+              <% end %>
             </td>
           </tr>
         <% end %>

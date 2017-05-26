@@ -18,17 +18,17 @@
     <% @readonly = nil %>
   <% end %>
   <div class="row">
-    <div class="input-field col m4 s12">
+    <div class="input-field col s4">
       <%= f.text_field :alias, :readonly => @readonly %>
       <%= f.label "Название карты", :class => @class %>
     </div>
   </div>
 
   <div class="row">
-    <div class="input-field col m4 s12">
+    <div class="input-field col s4">
       <% if @action == 'show' %>
         <%= f.text_field :currency_id, :readonly => @readonly, :value => @card.currency.name  %>
-      <% else %>
+      <% else %> 
         <%= f.collection_select(:currency_id, Currency.all, :id, :name) %>
       <% end %>
       <%= f.label "Валюта", :class => @class %>
@@ -36,35 +36,35 @@
   </div>
 
   <div class="row">
-    <div class="input-field col m4 s10">
+    <div class="input-field col s4">
       <%= f.text_field :card_number, :maxlength => 19, :readonly => @readonly  %>
       <%= f.label "Номер карты", :class => @class %>
       <%= f.hidden_field :cc_type %>
     </div>
-    <div class="input-field col m1 s2">
+    <div class="input-field col s1">
       <img src="/images/blank.png" id="card_type" class="responsive-img" width="64px" />
     </div>
   </div>
-
+  
   <div class="row">
     <div class="col s12">
       <p class="caption">Срок действия</p>
     </div>
   </div>
-
+  
   <div class="row">
-    <div class="input-field col m2 s6">
+    <div class="input-field col s2">
       <% if @action == 'show' %>
         <%= f.text_field :month_end, :readonly => @readonly  %>
-      <% else %>
+      <% else %> 
         <%= f.select :month_end, ((1..12).map {|i| [i,i] }) %>
       <% end %>
       <%= f.label "Месяц", :class => @class %>
     </div>
-    <div class="input-field col m2 s6">
+    <div class="input-field col s2">
       <% if @action == 'show' %>
         <%= f.text_field :year_end, :readonly => @readonly  %>
-      <% else %>
+      <% else %> 
         <%= f.select :year_end, ((Time.now.year..Time.now.year+10).map {|i| [i,i] }) %>
       <% end %>
       <%= f.label "Год", :class => @class %>
@@ -72,7 +72,7 @@
   </div>
 
   <div class="row">
-    <div class="input-field col m4 s12">
+    <div class="input-field col s4">
       <%= f.text_field :owner, :readonly => @readonly %>
       <%= f.label "Владелец карты", :class => @class %>
     </div>

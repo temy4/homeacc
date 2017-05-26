@@ -4,26 +4,26 @@
   <% end %>
   <input type="hidden" name="money_unit[job_description]" id="money_unit_job_description" value="">
   <div class="row">
-    <div class="input-field col m4 s6">
+    <div class="input-field col s4">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'money_unit_unit_category_id', :name => 'money_unit[unit_category_id]', :readonly => 'readonly', :value => (@money_unit.unit_category.nil? ? 'Не указан' : @money_unit.unit_category.name)  %>
-      <% else %>
+      <% else %> 
         <%= f.collection_select(:unit_category_id, UnitCategory.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
       <% end %>
       <%= f.label "Категория", :class => (@action == 'show' ? 'active' : '') %>
     </div>
-    <div class="input-field col m4 s6">
+    <div class="input-field col s4">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'money_unit_counterparty_id', :name => 'money_unit[counterparty_id]', :readonly => 'readonly', :value => (@money_unit.counterparty.nil? ? 'Не указан' : @money_unit.counterparty.counterparty_name)  %>
-      <% else %>
+      <% else %> 
         <%= f.collection_select(:counterparty_id, Counterparty.where(:is_active => 1), :id, :counterparty_name, :include_blank => "Не указан") %>
       <% end %>
       <%= f.label "Контрагент", :class => (@action == 'show' ? 'active' : '') %>
     </div>
-    <div class="input-field col m4 s12">
+    <div class="input-field col s4">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'money_unit_tax_id', :name => 'money_unit[tax_id]', :readonly => 'readonly', :value => (@money_unit.tax.nil? ? 'Не облагается' : @money_unit.tax.name)  %>
-      <% else %>
+      <% else %> 
         <%= f.collection_select(:tax_id, Tax.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
       <% end %>
       <%= f.label "Налог", :class => (@action == 'show' ? 'active' : '') %>
@@ -31,7 +31,7 @@
   </div>
 
   <div class="row">
-    <div class="input-field col m3 s6">
+    <div class="input-field col s3">
       <select id="money_unit_transaction_type" name="money_unit[transaction_type]">
         <% if @operation == 'in' %>
           <option value="in" selected>Приход</option>
@@ -44,17 +44,17 @@
       </select>
       <label>Тип транзакции</label>
     </div>
-    <div class="input-field col m2 s6">
+    <div class="input-field col s2">
       <input type="date" id="money_unit_transaction_date" name="money_unit[transaction_date]" class="datepicker">
       <label for="money_unit_transaction_date">Дата</label>
-    </div>
-    <div class="input-field col m7 s12">
+    </div>    
+    <div class="input-field col s7">
       <input id="money_unit_name" name="money_unit[name]" type="text" class="validate">
       <label for="money_unit_name">Описание</label>
     </div>
   </div>
   <div class="row">
-    <div class="input-field col m3 s4">
+    <div class="input-field col s3">
       <input id="money_unit_starting_amount" name="money_unit[starting_amount]" type="text" class="validate">
       <label for="money_unit_starting_amount">Сумма</label>
     </div>
@@ -62,17 +62,17 @@
     <!--  <input id="money_unit_next_period_price" name="money_unit[next_period_price]" type="text" class="validate">-->
     <!--  <label for="money_unit_next_period_price">Цена в следующем периоде</label>-->
     <!--</div>-->
-    <div class="input-field col m3 s8">
+    <div class="input-field col s3">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'currency_id', :name => 'currency_id', :readonly => 'readonly', :value => (@money_unit.currency.nil? ? 'Не указан' : @money_unit.currency.name)  %>
-      <% else %>
+      <% else %> 
         <%= f.collection_select(:currency_id, Currency.all, :id, :name, :include_blank => "Не указана", :selected => 1) %>
       <% end %>
       <%= f.label "Валюта", :class => (@action == 'show' ? 'active' : '') %>
     </div>
   </div>
   <div class="row">
-    <div class="input-field col m3 s12">
+    <div class="input-field col s3">
     <% unless @action == 'show' %>
       <div class="actions">
         <%= link_to 'Отмена', unit_categories_url, :class => "waves-effect waves-light btn red accent-1" %>
@@ -95,7 +95,7 @@ function getScheduleData(){
       string += '|' + $(this).val()
     }
   });
-
+  
   return string
 }
 $( document ).ready(function(){
@@ -120,7 +120,7 @@ $( document ).ready(function(){
       this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
     }
   }), picker_date_from_input = date_from_input.pickadate( 'picker' );
-
+  
   $('#money_unit_unit_category_id').on('change', function(){
     var cid = $(this).val()
     $.ajax({
@@ -134,49 +134,49 @@ $( document ).ready(function(){
         else{
           $('#money_unit_counterparty_id').val("")
         }
-
+        
         if(response[1] != null){
           $('#money_unit_tax_id').val(response[1].id)
         }
         else{
           $('#money_unit_tax_id').val("")
         }
-
+        
         $('#money_unit_counterparty_id, #money_unit_tax_id').material_select('destroy');
         $('#money_unit_counterparty_id, #money_unit_tax_id').material_select();
       }
     });
   });
-
+  
 })
 
 $('#money_unit_period').on('change', function(){
   $('.repeat').addClass('hide');
   $('.repeat').removeClass('active');
   var info_ref = null;
-
+  
   switch ( $(this).val() ){
     case 'd':
       $('#rep_d').removeClass('hide');
       $('#rep_d').addClass('active');
       break;
-
+      
     case 'w':
       $('#rep_w').removeClass('hide');
       $('#rep_w').addClass('active');
       break;
-
+      
     case 'm':
       $('#rep_m').removeClass('hide');
       $('#rep_m').addClass('active');
       break;
-
+      
     case 'y':
       $('#rep_y').removeClass('hide');
       $('#rep_y').addClass('active');
       break;
   }
-
+  
   // $('form').on('submit', function(event){
   //   event.preventDefault();
   //   var job = $('#money_unit_period').val() + getScheduleData();

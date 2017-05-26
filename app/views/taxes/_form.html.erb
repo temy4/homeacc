@@ -5,7 +5,7 @@
 
 
   <div class="row">
-    <div class="input-field col m5 s9">
+    <div class="input-field col s5">
       <% if @action == 'show' %>
         <%= f.text_field :name, :readonly => 'readonly' %>
       <% else %>
@@ -17,7 +17,7 @@
         <%= f.label :Налог, :class => "active" %>
       <% end %>
     </div>
-    <div class="input-field col m1 s3">
+    <div class="input-field col s1">
       <% if @action == 'show' %>
         <%= f.text_field :percent, :readonly => 'readonly' %>
       <% else %>
@@ -32,7 +32,7 @@
   </div>
 
   <div class="row">
-    <div class="input-field col m6 s12">
+    <div class="input-field col s6">
       <% if @action == 'show' %>
         <%= f.text_area :desc, :readonly => 'readonly', :class => "materialize-textarea" %>
       <% else %>
