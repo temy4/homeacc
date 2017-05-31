@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522132326) do
+ActiveRecord::Schema.define(version: 20170531143241) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -82,10 +82,10 @@ ActiveRecord::Schema.define(version: 20170522132326) do
     t.string   "transaction_type", limit: 255
     t.string   "name",             limit: 255
     t.string   "job_description",  limit: 255
-    t.float    "starting_amount",  limit: 24
-    t.boolean  "is_active",                    default: true
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.decimal  "starting_amount",              precision: 16, scale: 2
+    t.boolean  "is_active",                                             default: true
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
   end
 
   create_table "taxes", force: :cascade do |t|
@@ -126,10 +126,10 @@ ActiveRecord::Schema.define(version: 20170522132326) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "v_money_units_outs", id: false, force: :cascade do |t|
-    t.string "transaction_type", limit: 255
-    t.float  "amount",           limit: 24
-    t.date   "transaction_date"
-    t.string "alias",            limit: 255
+    t.string  "transaction_type", limit: 255
+    t.decimal "amount",                       precision: 16, scale: 2
+    t.date    "transaction_date"
+    t.string  "alias",            limit: 255
   end
 
 end
