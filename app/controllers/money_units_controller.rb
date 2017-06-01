@@ -68,7 +68,7 @@ class MoneyUnitsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to money_units_url, flash: { notice: 'Операция была удалена', type: 'deleted', state: 'ok', rollback_url: "" } }
       format.json { head :no_content }
-    end    
+    end
   end
 
   def destroy_multiple
@@ -90,7 +90,7 @@ class MoneyUnitsController < ApplicationController
       format.html { render :new }
     end
   end
-  
+
   def money_out
     @action = "new"
     @money_unit = MoneyUnit.new
@@ -100,7 +100,7 @@ class MoneyUnitsController < ApplicationController
       format.html { render :new }
     end
   end
-  
+
   def get_cf_data
     # client_id = params[:client_id]
     # @projects = Project.where(client_id: client_id)
@@ -108,15 +108,15 @@ class MoneyUnitsController < ApplicationController
     MoneyUnit.where('is_active = 1 AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).each do |mu|
       money_units.push([mu, mu.counterparty, mu.unit_category, mu.currency])
     end
-    
-    chart_out_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="out" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:amount).to_a
-    chart_in_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="in" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:amount).to_a
-    
+
+    chart_out_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="out" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:total).to_a
+    chart_in_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="in" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:total).to_a
+
     respond_to do |format|
       format.json { render json: [money_units, chart_out_data, chart_in_data] }
     end
   end
-  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_money_unit
@@ -125,6 +125,6 @@ class MoneyUnitsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def money_unit_params
-      params.require(:money_unit).permit(:counterparty_id, :transaction_date, :unit_category_id, :currency_id, :tax_id, :transaction_type, :name, :job_description, :starting_amount, :next_period_price, :current_period, :next_period, :is_active)
+      params.require(:money_unit).permit(:counterparty_id, :transaction_date, :unit_category_id, :currency_id, :tax_id, :transaction_type, :name, :job_description, :starting_amount, :planned_amount, :next_period_price, :current_period, :next_period, :is_active)
     end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531143241) do
+ActiveRecord::Schema.define(version: 20170601094110) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "cc_type",     limit: 255
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20170531143241) do
     t.string   "name",             limit: 255
     t.string   "job_description",  limit: 255
     t.decimal  "starting_amount",              precision: 16, scale: 2
+    t.decimal  "planned_amount",               precision: 16, scale: 2
     t.boolean  "is_active",                                             default: true
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false

@@ -40,7 +40,6 @@
           <option value="in">Приход</option>
           <option value="out"selected>Расход</option>
         <% end %>
-        <option value="other">Другое</option>
       </select>
       <label>Тип транзакции</label>
     </div>
@@ -54,15 +53,15 @@
     </div>
   </div>
   <div class="row">
-    <div class="input-field col m3 s4">
-      <input id="money_unit_starting_amount" name="money_unit[starting_amount]" type="text" class="validate">
-      <label for="money_unit_starting_amount">Сумма</label>
+    <div id="planned_amount_div" class="input-field col m3 s2 hide">
+      <input id="money_unit_planned_amount" name="money_unit[planned_amount]" type="text" class="validate">
+      <label for="money_unit_starting_amount">Сумма (план)</label>
     </div>
-    <!--<div class="input-field col s3">-->
-    <!--  <input id="money_unit_next_period_price" name="money_unit[next_period_price]" type="text" class="validate">-->
-    <!--  <label for="money_unit_next_period_price">Цена в следующем периоде</label>-->
-    <!--</div>-->
-    <div class="input-field col m3 s8">
+    <div class="input-field col m3 s2">
+      <input id="money_unit_starting_amount" name="money_unit[starting_amount]" type="text" class="validate">
+      <label for="money_unit_starting_amount">Сумма (факт)</label>
+    </div>
+    <div class="input-field col m6 s8">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'currency_id', :name => 'currency_id', :readonly => 'readonly', :value => (@money_unit.currency.nil? ? 'Не указан' : @money_unit.currency.name)  %>
       <% else %>
@@ -72,7 +71,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="input-field col m3 s12">
+    <div class="input-field col m6 s12">
     <% unless @action == 'show' %>
       <div class="actions">
         <%= link_to 'Отмена', unit_categories_url, :class => "waves-effect waves-light btn red accent-1" %>
@@ -112,12 +111,33 @@ $( document ).ready(function(){
     formatSubmit: 'yyyy-mm-dd',
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15, // Creates a dropdown of 15 years to control year
-    max: new Date(),
     hiddenSuffix: '',
     hiddenName: 'money_unit[transaction_date]',
     onStart: function() {
       var date = new Date()
-      this.set('select', [date.getFullYear(), date.getMonth() + 1, date.getDate()]);
+      this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+    },
+    onSet: function(a){
+      var dt = new Date();
+      dt.setHours(0);
+      dt.setMinutes(0);
+      dt.setSeconds(0);
+
+      if( this.get('select')['obj'] > dt ){
+        $('#planned_amount_div').removeClass('hide');
+        $('#money_unit_starting_amount').attr('disabled', true);
+        $('#money_unit_planned_amount').attr('disabled', false);
+      }
+      else{
+        if($('#money_unit_planned_amount').val() > 0){
+          $('#planned_amount_div').removeClass('hide');
+        }
+        else{
+          $('#planned_amount_div').addClass('hide');
+        }
+        $('#money_unit_starting_amount').attr('disabled', false);
+        $('#money_unit_planned_amount').attr('disabled', true);
+      }
     }
   }), picker_date_from_input = date_from_input.pickadate( 'picker' );
 

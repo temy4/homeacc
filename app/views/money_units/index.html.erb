@@ -114,7 +114,14 @@ $( document ).ready(function(){
     $('#budgeting_data_out').empty();
     render_table(view_id)
   }
-
+  function nvl(val1, val2){
+    if (val1 == null){
+      return val2;
+    }
+    else{
+      return val1;
+    }
+  }
   function render_table(view){
     var balance = 0;
     switch(view){
@@ -125,12 +132,24 @@ $( document ).ready(function(){
         $('#budgeting_data_out').empty();
         $.each( cf_data, function( key, value ) {
           var amount = value[0].transaction_type == 'in' ? value[0].starting_amount : value[0].starting_amount * -1;
+          var planned = value[0].transaction_type == 'in' ? value[0].planned_amount : value[0].planned_amount * -1;
           var t_date = Date.parse(value[0].transaction_date)
 
-          balance += parseFloat(amount);
-
-          table.append($('<tr class="' + (value[0].transaction_type == 'in' ? 'green-text text-darken-2' : 'red-text text-darken-2') + '">')
-            .append('<td>' + amount.toLocaleString('ru-RU') + '&nbsp;₽</td>')
+          balance += parseFloat(nvl(amount, planned));
+          var color = '';
+          if(value[0].planned_amount > 0 && (value[0].starting_amount == null || value[0].starting_amount == 0)){
+            color = 'grey-text text-darken-1'
+          }
+          else{
+            if (value[0].transaction_type == 'in'){
+              color = 'green-text text-darken-2'
+            }
+            else{
+              color = 'red-text text-darken-2'
+            }
+          }
+          table.append($('<tr class="' + color + '">')
+            .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
             .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2].name) + '</td>')
             .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
@@ -147,6 +166,7 @@ $( document ).ready(function(){
         $.each( cf_data, function( key, value ) {
           var ref_table = null;
           var text_color = null
+
           if (value[0].transaction_type == 'in'){
             ref_table = table_in;
             text_color = 'green-text text-darken-2';
@@ -156,13 +176,16 @@ $( document ).ready(function(){
             text_color = 'red-text text-darken-2';
           }
 
-          var amount = value[0].transaction_type == 'in' ? value[0].starting_amount : value[0].starting_amount * -1;
+          if(value[0].planned > 0 && (value[0].amount == null || value[0].amount == 0) ){
+            text_color = 'grey-text text-darken-1'
+          }
+          var amount = value[0].transaction_type == 'in' ? value[0].nvl(amount, planned) : value[0].nvl(amount, planned) * -1;
           var t_date = Date.parse(value[0].transaction_date)
 
-          balance += parseFloat(amount);
+          balance += parseFloat(nvl(amount, planned));
 
           ref_table.append($('<tr class="' + text_color + '">')
-            .append('<td>' + amount.toLocaleString('ru-RU') + '&nbsp;₽</td>')
+            .append('<td>' + nvl(amount, planned) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
             .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2].name) + '</td>')
             .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
@@ -219,7 +242,6 @@ $( document ).ready(function(){
     formatSubmit: 'yyyy-mm-dd',
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15, // Creates a dropdown of 15 years to control year
-    max: new Date(),
     onSet: function(dateSet) {
         if ( typeof(dateSet.select) == 'number' ){
           picker_date_from_input.close(true);
@@ -247,7 +269,6 @@ $( document ).ready(function(){
     hiddenSuffix: '_val',
     selectMonths: true, // Creates a dropdown to control month
     selectYears: 15, // Creates a dropdown of 15 years to control year
-    max: new Date(),
     onSet: function(dateSet) {
       if ( typeof(dateSet.select) == 'number' ){
         picker_date_to_input.close(true);
@@ -258,7 +279,8 @@ $( document ).ready(function(){
   if (picker_date_from_input !== undefined && picker_date_to_input !== undefined ){
     nowdate = new Date();
     picker_date_to_input.set('select', nowdate);
-    picker_date_from_input.set('select', nowdate.setDate(nowdate.getDate()-30));
+    nowdate.setDate(1);
+    picker_date_from_input.set('select', nowdate);
   }
 
   $('#show_btn').on('click', function(){
