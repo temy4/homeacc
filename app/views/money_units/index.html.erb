@@ -176,16 +176,16 @@ $( document ).ready(function(){
             text_color = 'red-text text-darken-2';
           }
 
-          if(value[0].planned > 0 && (value[0].amount == null || value[0].amount == 0) ){
+          if(value[0].planned_amount > 0 && (value[0].starting_amount == null || value[0].starting_amount == 0) ){
             text_color = 'grey-text text-darken-1'
           }
-          var amount = value[0].transaction_type == 'in' ? value[0].nvl(amount, planned) : value[0].nvl(amount, planned) * -1;
+          var amount = value[0].transaction_type == 'in' ? nvl(value[0].starting_amount, value[0].planned_amount) : nvl(value[0].starting_amount, value[0].planned_amount) * -1;
           var t_date = Date.parse(value[0].transaction_date)
 
-          balance += parseFloat(nvl(amount, planned));
+          balance += parseFloat(nvl(value[0].starting_amount, value[0].planned_amount));
 
           ref_table.append($('<tr class="' + text_color + '">')
-            .append('<td>' + nvl(amount, planned) + '&nbsp;₽</td>')
+            .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
             .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2].name) + '</td>')
             .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
@@ -216,6 +216,9 @@ $( document ).ready(function(){
         chart_out_data = response[1];
         chart_in_data = response[2];
         render_table(view);
+        chart_in_data.length <= 0 ? $('#chart_in_div').hide() : $('#chart_in_div').show()
+        chart_out_data.length <= 0 ? $('#chart_out_div').hide() : $('#chart_out_div').show()
+
         render_chart();
       }
     });
@@ -278,9 +281,11 @@ $( document ).ready(function(){
 
   if (picker_date_from_input !== undefined && picker_date_to_input !== undefined ){
     nowdate = new Date();
-    picker_date_to_input.set('select', nowdate);
     nowdate.setDate(1);
     picker_date_from_input.set('select', nowdate);
+    nowdate.setMonth(nowdate.getMonth()+1);
+    nowdate.setDate(nowdate.getDate()-1);
+    picker_date_to_input.set('select', nowdate);
   }
 
   $('#show_btn').on('click', function(){
@@ -334,7 +339,12 @@ $( document ).ready(function(){
                        'height':300};
         // Instantiate and draw our chart, passing in some options.
         var chart_in = new google.visualization.PieChart(document.getElementById('chart_in_div'));
+        google.visualization.events.addListener(drawChart, 'error', readyHandler);
         chart_in.draw(data_in, options_in);
+    }
+
+    function readyHandler() {
+      alert('The user selected');
     }
   }
 

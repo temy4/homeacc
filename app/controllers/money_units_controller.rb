@@ -105,7 +105,7 @@ class MoneyUnitsController < ApplicationController
     # client_id = params[:client_id]
     # @projects = Project.where(client_id: client_id)
     money_units = []
-    MoneyUnit.where('is_active = 1 AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).each do |mu|
+    MoneyUnit.where('is_active = 1 AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).order(:transaction_date).each do |mu|
       money_units.push([mu, mu.counterparty, mu.unit_category, mu.currency])
     end
 
