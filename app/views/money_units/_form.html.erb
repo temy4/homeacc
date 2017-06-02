@@ -10,7 +10,7 @@
       <% else %>
         <%= f.collection_select(:unit_category_id, UnitCategory.where(:is_active => 1), :id, :name, :include_blank => "Не указан") %>
       <% end %>
-      <%= f.label "Категория", :class => (@action == 'show' ? 'active' : '') %>
+      <%= f.label "Категория *", :for => :unit_category_id, :class => (@action == 'show' ? 'active' : ''), "data-error" => "категория не выбрана" %>
     </div>
     <div class="input-field col m4 s6">
       <% if @action == 'show' %>
@@ -32,42 +32,38 @@
 
   <div class="row">
     <div class="input-field col m3 s6">
-      <select id="money_unit_transaction_type" name="money_unit[transaction_type]">
         <% if @operation == 'in' %>
-          <option value="in" selected>Приход</option>
-          <option value="out">Расход</option>
-        <% elsif @operation == 'out' %>
-          <option value="in">Приход</option>
-          <option value="out"selected>Расход</option>
+          <%= f.select :transaction_type, {"Приход" => "in", "Расход" => "out"}, include_blank: false, :selected => "in" %>
+        <% else %>
+          <%= f.select :transaction_type, {"Приход" => "in", "Расход" => "out"}, include_blank: false, :selected => "out" %>
         <% end %>
-      </select>
-      <label>Тип транзакции</label>
+      <label>Тип транзакции *</label>
     </div>
     <div class="input-field col m2 s6">
-      <input type="date" id="money_unit_transaction_date" name="money_unit[transaction_date]" class="datepicker">
-      <label for="money_unit_transaction_date">Дата</label>
+      <%= f.text_field :transaction_date, :class => "datepicker" %>
+      <label for="money_unit_transaction_date">Дата *</label>
     </div>
     <div class="input-field col m7 s12">
-      <input id="money_unit_name" name="money_unit[name]" type="text" class="validate">
+      <%= f.text_field :name %>
       <label for="money_unit_name">Описание</label>
     </div>
   </div>
   <div class="row">
     <div id="planned_amount_div" class="input-field col m3 s2 hide">
-      <input id="money_unit_planned_amount" name="money_unit[planned_amount]" type="text" class="validate">
-      <label for="money_unit_starting_amount">Сумма (план)</label>
+      <%= f.text_field :planned_amount %>
+      <label for="money_unit_starting_amount">Сумма (план) *</label>
     </div>
     <div class="input-field col m3 s2">
-      <input id="money_unit_starting_amount" name="money_unit[starting_amount]" type="text" class="validate">
-      <label for="money_unit_starting_amount">Сумма (факт)</label>
+      <%= f.text_field :starting_amount %>
+      <label for="money_unit_starting_amount">Сумма (факт) *</label>
     </div>
     <div class="input-field col m6 s8">
       <% if @action == 'show' %>
         <%= f.text_field :id => 'currency_id', :name => 'currency_id', :readonly => 'readonly', :value => (@money_unit.currency.nil? ? 'Не указан' : @money_unit.currency.name)  %>
       <% else %>
-        <%= f.collection_select(:currency_id, Currency.all, :id, :name, :include_blank => "Не указана", :selected => 1) %>
+        <%= f.collection_select(:currency_id, Currency.all, :id, :name, :include_blank => false) %>
       <% end %>
-      <%= f.label "Валюта", :class => (@action == 'show' ? 'active' : '') %>
+      <%= f.label "Валюта *", :class => (@action == 'show' ? 'active' : '') %>
     </div>
   </div>
   <div class="row">
@@ -115,7 +111,9 @@ $( document ).ready(function(){
     hiddenName: 'money_unit[transaction_date]',
     onStart: function() {
       var date = new Date()
-      this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+      if (this.get('select') == null){
+        this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+      }
     },
     onSet: function(a){
       var dt = new Date();

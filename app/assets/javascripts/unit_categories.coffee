@@ -34,18 +34,18 @@ refreshCPList = ->
       $('#addCounterpartyModal').closeModal()
       $('#counterparty_counterparty_name').val ''
       return
-    Materialize.toast '<span>Контрагент добавлен</span>', 5000
+    Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>Контрагент добавлен</span>', 5000, 'rounded'
     return
   ).fail (msg) ->
     if (code = msg.responseJSON.code) == undefined
-      Materialize.toast '<span>Поле не может быть пустым</span>', 5000
+      Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>Поле не может быть пустым</span>', 5000, 'rounded'
     else
       switch msg.responseJSON.code[0]
         when 900
-          Materialize.toast '<span>Контрагент уже существует</span>', 5000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>Контрагент уже существует</span>', 5000, 'rounded'
           $('#addCounterpartyModal').closeModal()
         when 901
-          Materialize.toast '<span>Контрагент был ранее удален</span><a class="btn-flat yellow-text" href="' + msg.responseJSON.rollback + '">Восстановить<a>', 10000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>Контрагент был ранее удален</span><a class="btn-flat yellow-text" href="' + msg.responseJSON.rollback + '">Восстановить<a>', 10000, 'rounded'
           $('#addCounterpartyModal').closeModal()
     return
   return

@@ -30,21 +30,21 @@ $(document).on 'ready page:load', ->
     text = $('#notice').val()
     switch type
       when 'created'
-        Materialize.toast '<span>' + text + '</span>', 5000
+        Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span>', 5000, 'rounded'
       when 'updated'
-        Materialize.toast '<span>' + text + '</span>', 5000
+        Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span>', 5000, 'rounded'
       when 'error'
         if state == 'ok'
-          Materialize.toast '<span>' + text + '</span><a class="btn-flat yellow-text" href="' + rollback + '">Восстановить<a>', 10000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span><a class="btn-flat yellow-text" href="' + rollback + '">Восстановить<a>', 10000, 'rounded'
         else
-          Materialize.toast '<span>' + text + '</span>', 5000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span>', 5000, 'rounded'
       when 'deleted'
         if state == 'ok'
-          Materialize.toast '<span>' + text + '</span><a class="btn-flat yellow-text" href="' + rollback + '">Отмена<a>', 10000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span><a class="btn-flat yellow-text" href="' + rollback + '">Отмена<a>', 10000, 'rounded'
         else
-          Materialize.toast '<span>' + text + '</span>', 5000
+          Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span>', 5000, 'rounded'
       else
-        Materialize.toast '<span>' + text + '</span>', 5000
+        Materialize.toast '<i class="material-icons">info</i>&nbsp;<span>' + text + '</span>', 5000, 'rounded'
   $.expr[':'].contains = $.expr.createPseudo((arg) ->
     (elem) ->
       $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0

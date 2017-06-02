@@ -16,7 +16,7 @@ class CurrenciesController < ApplicationController
     url = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=#{Time.new.strftime("%d.%m.%Y")}"
     xml = Nokogiri::XML(open(url))
     rates = xml.xpath("//ValCurs/Valute")
-    
+
     respond_to do |format|
       if rates.size > 0
 
@@ -25,7 +25,7 @@ class CurrenciesController < ApplicationController
 
           cur = Currency.new
           cur.cbr_num = '000'
-          cur.name = 'Российскийский рубль'
+          cur.name = 'Российский рубль'
           cur.sign = 'RUB'
           cur.currency_count = '1'
           cur.rate = 1
@@ -37,7 +37,7 @@ class CurrenciesController < ApplicationController
             sign = rate.css('CharCode').children.first
             nom = rate.css('Nominal').children.first
             val = rate.css('Value').children.first
-            
+
             cur = Currency.new
             cur.cbr_num = id
             cur.name = name

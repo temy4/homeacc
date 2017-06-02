@@ -100,8 +100,8 @@
     <div class="section">
       <div class="row">
   	  <div class="col s12">
-  	  	<p class="notice"><%= notice %></p>
-  			<p class="alert"><%= alert %></p>
+  	  	<p class="notice hide"><%= notice %></p>
+  			<p class="alert hide"><%= alert %></p>
   			  <%= yield %>
         </div>
       </div>
@@ -134,6 +134,15 @@
   $( document ).ready(function(){
 		$(".button-collapse").sideNav();
 		$(".dropdown-button").dropdown();
+    var notice = $('p.notice')
+    var alert_m = $('p.alert')
+
+    if(notice.text() != ''){
+      Materialize.toast('<i class="material-icons">info</i>&nbsp;' + notice.text(), 4000, 'rounded')
+    }
+    if(alert_m.text() != ''){
+      Materialize.toast('<i class="material-icons">warning</i>&nbsp;' + alert_m.text(), 8000)
+    }
   })
 </script>
 </html>

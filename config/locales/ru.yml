@@ -1,0 +1,26 @@
+ru:
+  activerecord:
+    models:
+      unit_category: "Категория"
+    attributes:
+      money_unit:
+        unit_category_id: "Категория"
+        transaction_type: "Тип транзакции"
+        transaction_date: "Дата транзакции"
+        starting_amount: "Сумма"
+        planned_amount: "Сумма"
+    errors:
+      models:
+        unit_category: "Категория"
+        money_unit:
+          attributes:
+            transaction_type:
+              blank: "не выбран"
+            unit_category_id:
+              blank: "не выбрана"
+            transaction_date:
+              blank: "не выбрана"
+            starting_amount:
+              blank: "не указана"
+            planned_amount:
+              blank: "не указана"

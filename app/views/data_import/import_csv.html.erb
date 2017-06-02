@@ -130,7 +130,7 @@ $( document ).ready(function(){
           });
         }
         else{
-          Materialize.toast(result.message, 4000)
+          Materialize.toast('<i class="material-icons">info</i>&nbsp;' + result.message, 4000, 'rounded')
         }
         $('#progressBar').addClass('hide');
         $('#importForm').show();

@@ -36,9 +36,11 @@ class MoneyUnitsController < ApplicationController
 
     respond_to do |format|
       if @money_unit.save
-        format.html { redirect_to @money_unit, notice: 'Money unit was successfully created.' }
+        format.html { redirect_to @money_unit, notice: 'Операция добавлена' }
         format.json { render :show, status: :created, location: @money_unit }
       else
+        session[:money_unit] = params[:money_unit]
+                # redirect_to money_in
         format.html { render :new }
         format.json { render json: @money_unit.errors, status: :unprocessable_entity }
       end
@@ -50,7 +52,7 @@ class MoneyUnitsController < ApplicationController
   def update
     respond_to do |format|
       if @money_unit.update(money_unit_params)
-        format.html { redirect_to @money_unit, notice: 'Money unit was successfully updated.' }
+        format.html { redirect_to @money_unit, notice: 'Операция обновлена' }
         format.json { render :show, status: :ok, location: @money_unit }
       else
         format.html { render :edit }
