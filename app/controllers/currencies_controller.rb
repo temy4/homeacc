@@ -9,7 +9,7 @@ class CurrenciesController < ApplicationController
     @currencies = Currency.where('cbr_num NOT IN ("000", "960")')
   end
 
-  def update_all
+  def self.update_all
     require 'nokogiri'
     require 'open-uri'
 
