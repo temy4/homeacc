@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  month: 
+  year: 
+  total: 
+  : 
+  =,: MyString
+  : 
+  =,: MyString
+  transaction_type: MyString
+
+two:
+  month: 
+  year: 
+  total: 
+  : 
+  =,: MyString
+  : 
+  =,: MyString
+  transaction_type: MyString
