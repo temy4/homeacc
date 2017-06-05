@@ -7,6 +7,16 @@ class MoneyUnitsController < ApplicationController
   # GET /money_units.json
   def index
     @money_units = MoneyUnit.where('is_active = 1')
+    total_res = MoneyUnit.connection.execute('
+      SELECT
+        IFNULL((SELECT sum(starting_amount) FROM `money_units` WHERE transaction_type="in"), 0) -
+        IFNULL((SELECT sum(starting_amount) FROM `money_units` WHERE transaction_type="out"), 0) +
+        IFNULL((SELECT sum(planned_amount) FROM `money_units` WHERE transaction_type="in" AND starting_amount is null), 0) -
+        IFNULL((SELECT sum(planned_amount) FROM `money_units` WHERE transaction_type="out" AND starting_amount is null), 0)
+      AS total
+    ');
+
+    @total = ActionController::Base.helpers.number_to_currency(total_res.first.collect!(&:to_f).first, unit: "", separator: ",", delimiter: " ")
   end
 
   # GET /money_units/1
@@ -108,7 +118,7 @@ class MoneyUnitsController < ApplicationController
     # @projects = Project.where(client_id: client_id)
     money_units = []
     MoneyUnit.where('is_active = 1 AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).order(:transaction_date).each do |mu|
-      money_units.push([mu, mu.counterparty, mu.unit_category, mu.currency])
+      money_units.push([mu, mu.counterparty, mu.unit_category.categories_groups.pluck(:alias).join(", "), mu.currency])
     end
 
     chart_out_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="out" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:total).to_a

@@ -28,7 +28,10 @@
   <div id="chart_out_div" class="input-field col s12 m6"></div>
 </div>
 <div class="row">
-  <div class="input-field col s12 m3"><h5 id="balance_label" class="green-text text-darken-2">Сальдо на конец периода: <span id="balance">0&nbsp;₽</span></h5></div>
+  <div class="input-field col s12 m3">
+    <h5 id="balance_label" class="green-text text-darken-2">Сальдо на конец периода: <span id="balance">0&nbsp;₽</span></h5>
+    <h6 class="orange-text text-darken-2">Общий остаток: <%= @total %> ₽</span></h6>
+  </div>
 </div>
 <div id="cashflow" class="row">
   <div class="col s12">
@@ -37,7 +40,7 @@
         <tr>
           <th>Сумма</th>
           <th>Дата</th>
-          <th>Категория</th>
+          <th>Группа</th>
           <th>Контрагент</th>
         </tr>
       </thead>
@@ -56,7 +59,7 @@
         <tr>
           <th>Приход</th>
           <th>Дата</th>
-          <th>Категория</th>
+          <th>Группа</th>
           <th>Контрагент</th>
         </tr>
       </thead>
@@ -73,7 +76,7 @@
         <tr>
           <th>Расход</th>
           <th>Дата</th>
-          <th>Категория</th>
+          <th>Группа</th>
           <th>Контрагент</th>
         </tr>
       </thead>
@@ -151,7 +154,7 @@ $( document ).ready(function(){
           table.append($('<tr class="' + color + '">')
             .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
-            .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2].name) + '</td>')
+            .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2]) + '</td>')
             .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
           );
 
@@ -187,7 +190,7 @@ $( document ).ready(function(){
           ref_table.append($('<tr class="' + text_color + '">')
             .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
-            .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2].name) + '</td>')
+            .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2]) + '</td>')
             .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
           );
         });
