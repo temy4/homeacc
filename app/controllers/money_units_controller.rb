@@ -46,11 +46,10 @@ class MoneyUnitsController < ApplicationController
 
     respond_to do |format|
       if @money_unit.save
-        format.html { redirect_to @money_unit, notice: 'Операция добавлена' }
-        format.json { render :show, status: :created, location: @money_unit }
+        format.html { redirect_to money_units_url, notice: 'Операция добавлена' }
+        format.json { render :show, status: :created }
       else
         session[:money_unit] = params[:money_unit]
-                # redirect_to money_in
         format.html { render :new }
         format.json { render json: @money_unit.errors, status: :unprocessable_entity }
       end
@@ -63,7 +62,7 @@ class MoneyUnitsController < ApplicationController
     respond_to do |format|
       if @money_unit.update(money_unit_params)
         format.html { redirect_to @money_unit, notice: 'Операция обновлена' }
-        format.json { render :show, status: :ok, location: @money_unit }
+        format.json { render :show, status: :ok, location: @money_units_path }
       else
         format.html { render :edit }
         format.json { render json: @money_unit.errors, status: :unprocessable_entity }
@@ -118,7 +117,7 @@ class MoneyUnitsController < ApplicationController
     # @projects = Project.where(client_id: client_id)
     money_units = []
     MoneyUnit.where('is_active = 1 AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).order(:transaction_date).each do |mu|
-      money_units.push([mu, mu.counterparty, mu.unit_category.categories_groups.pluck(:alias).join(", "), mu.currency])
+      money_units.push([mu, mu.name, mu.unit_category.categories_groups.pluck(:alias).join(", "), mu.currency])
     end
 
     chart_out_data = VMoneyUnitsOut.group(:alias).order(:transaction_date).where('transaction_type="out" AND transaction_date BETWEEN ? AND ?', params[:date_from], params[:date_to]).sum(:total).to_a

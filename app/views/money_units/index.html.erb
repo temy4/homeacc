@@ -41,7 +41,7 @@
           <th>Сумма</th>
           <th>Дата</th>
           <th>Группа</th>
-          <th>Контрагент</th>
+          <th>Описание</th>
         </tr>
       </thead>
 
@@ -60,7 +60,7 @@
           <th>Приход</th>
           <th>Дата</th>
           <th>Группа</th>
-          <th>Контрагент</th>
+          <th>Описание</th>
         </tr>
       </thead>
 
@@ -77,7 +77,7 @@
           <th>Расход</th>
           <th>Дата</th>
           <th>Группа</th>
-          <th>Контрагент</th>
+          <th>Описание</th>
         </tr>
       </thead>
 
@@ -115,6 +115,9 @@ $( document ).ready(function(){
     $('#cashflow_data').empty();
     $('#budgeting_data_in').empty();
     $('#budgeting_data_out').empty();
+    $('#cashflow_data tr').removeClass('yellow lighten-4');
+    $('#budgeting_data_in tr').removeClass('yellow lighten-4');
+    $('#budgeting_data_out tr').removeClass('yellow lighten-4');
     render_table(view_id)
   }
   function nvl(val1, val2){
@@ -145,17 +148,17 @@ $( document ).ready(function(){
           }
           else{
             if (value[0].transaction_type == 'in'){
-              color = 'green-text text-darken-2'
+              color = 'green-text text-darken-2 data-in'
             }
             else{
-              color = 'red-text text-darken-2'
+              color = 'red-text text-darken-2 data-out'
             }
           }
           table.append($('<tr class="' + color + '">')
             .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
             .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2]) + '</td>')
-            .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
+            .append('<td>' + (value[1] == null || value[1] == '' ? '<i>&mdash;</i>' : value[1]) + '</td>')
           );
 
         });
@@ -172,11 +175,11 @@ $( document ).ready(function(){
 
           if (value[0].transaction_type == 'in'){
             ref_table = table_in;
-            text_color = 'green-text text-darken-2';
+            text_color = 'green-text text-darken-2 data-in';
           }
           else{
             ref_table = table_out;
-            text_color = 'red-text text-darken-2';
+            text_color = 'red-text text-darken-2 data-out';
           }
 
           if(value[0].planned_amount > 0 && (value[0].starting_amount == null || value[0].starting_amount == 0) ){
@@ -191,7 +194,7 @@ $( document ).ready(function(){
             .append('<td>' + nvl(value[0].starting_amount, value[0].planned_amount) + '&nbsp;₽</td>')
             .append('<td>' + formatDate(new Date(t_date)) + '</td>')
             .append('<td>' + (value[2] == null ? '<i>Не указана</i>' : value[2]) + '</td>')
-            .append('<td>' + (value[1] == null ? '<i>Не указан</i>' : value[1].counterparty_name) + '</td>')
+            .append('<td>' + (value[1] == null || value[1] == '' ? '<i>&mdash;</i>' : value[1]) + '</td>')
           );
         });
       break;
@@ -322,9 +325,12 @@ $( document ).ready(function(){
         );
 
         // Set chart options
-        var options_out = {'title':'Расходы',
-                       'width':500,
-                       'height':300};
+        var options_out = {
+          'title':'Расходы',
+          'width':500,
+          'height':300
+        };
+
         // Instantiate and draw our chart, passing in some options.
         var chart_out = new google.visualization.PieChart(document.getElementById('chart_out_div'));
         chart_out.draw(data_out, options_out);
@@ -337,18 +343,66 @@ $( document ).ready(function(){
         );
 
         // Set chart options
-        var options_in = {'title':'Доходы',
-                       'width':500,
-                       'height':300};
+        var options_in = {
+          'title':'Доходы',
+          'width':500,
+          'height':300
+        };
+
         // Instantiate and draw our chart, passing in some options.
         var chart_in = new google.visualization.PieChart(document.getElementById('chart_in_div'));
-        google.visualization.events.addListener(drawChart, 'error', readyHandler);
+        google.visualization.events.addListener(chart_in, 'select', inSelectHandler);
+        google.visualization.events.addListener(chart_out, 'select', outSelectHandler);
+
+        var in_view = new google.visualization.DataView(data_in);
+        var out_view = new google.visualization.DataView(data_out);
+
+        function inSelectHandler(e) {
+          var selectedItem = chart_in.getSelection()[0];
+          chart_out.setSelection();
+          if (selectedItem) {
+            var topic = data_in.getValue(selectedItem.row, 0);
+            highlightRows('in', topic)
+          }
+          else{
+            $('#cashflow_data tr').removeClass('yellow lighten-4');
+            $('#budgeting_data_in tr').removeClass('yellow lighten-4');
+            $('#budgeting_data_out tr').removeClass('yellow lighten-4');
+          }
+        }
+
+        function outSelectHandler(e) {
+          var selectedItem = chart_out.getSelection()[0];
+          chart_in.setSelection();
+          if (selectedItem) {
+            var topic = data_out.getValue(selectedItem.row, 0);
+            highlightRows('out', topic)
+          }
+          else{
+            $('#cashflow_data tr').removeClass('yellow lighten-4');
+            $('#budgeting_data_in tr').removeClass('yellow lighten-4');
+            $('#budgeting_data_out tr').removeClass('yellow lighten-4');
+          }
+        }
+
+        function highlightRows(source, topic){
+          var table = null;
+          $('#cashflow_data tr').removeClass('yellow lighten-4');
+          $('#budgeting_data_in tr').removeClass('yellow lighten-4');
+          $('#budgeting_data_out tr').removeClass('yellow lighten-4');
+
+          if (view == 1) {
+            table = '#cashflow_data'
+          }
+          else if (view == 2) {
+            table = '#budgeting_data_' + source
+          }
+          $(table + ' tr.data-' + source + ':contains(' + topic + ')').addClass('yellow lighten-4');
+        }
+
         chart_in.draw(data_in, options_in);
     }
 
-    function readyHandler() {
-      alert('The user selected');
-    }
   }
 
 });
